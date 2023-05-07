@@ -1,8 +1,8 @@
-import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:y13_gui_project/stock_status_toggle.dart';
-import 'package:y13_gui_project/sorting_dropdown.dart';
-import 'package:y13_gui_project/item_card.dart';
+import 'package:y13_gui_project/Issue/issue.dart';
+import 'package:y13_gui_project/Add/add.dart';
+import 'package:y13_gui_project/Return/return.dart';
+import 'package:y13_gui_project/search_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,9 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Stor.io',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+        ),
       ),
       home: const Home(),
       debugShowCheckedModeBanner: false,
@@ -32,56 +34,37 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String searchValue = '';
+  int _selectedIndex = 0;
+
+  static const List<Widget> _pages = <Widget>[
+    Issue(),
+    Return(),
+    Add(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: EasySearchBar(
-          title: const Text('Stor.io'),
-          onSearch: (value) => setState(() => searchValue = value),
-        ),
-        body: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                SortingDropdown(),
-                StockStatusToggle(),
-              ],
-            ),
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height - 162,
-                maxWidth: MediaQuery.of(context).size.width,
-              ),
-              child: ListView(
-                shrinkWrap: false,
-                children: const [
-                  ItemCard(),
-                  ItemCard(),
-                  ItemCard(),
-                  ItemCard(),
-                ],
-              ),
-            )
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.book),
-              label: 'Issue',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.restore),
-              label: 'Return',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add),
-              label: 'Add',
-            ),
-          ],
-        ));
+      appBar: const SearchBar(),
+      body: _pages.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Issue',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.restore),
+            label: 'Return',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Add',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: (index) => setState(() => _selectedIndex = index),
+      ),
+    );
   }
 }

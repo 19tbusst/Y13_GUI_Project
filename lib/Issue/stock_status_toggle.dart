@@ -14,6 +14,7 @@ class StockStatusToggle extends StatefulWidget {
 
 class _StockStatusToggleState extends State<StockStatusToggle> {
   final List<bool> _selectedOptions = <bool>[true, true];
+
   @override
   Widget build(BuildContext context) {
     return ToggleButtons(
@@ -23,6 +24,11 @@ class _StockStatusToggleState extends State<StockStatusToggle> {
           _selectedOptions[index] = !_selectedOptions[index];
         });
       },
+      borderRadius: const BorderRadius.all(Radius.circular(8)),
+      constraints: const BoxConstraints(
+        minHeight: 40.0,
+        minWidth: 80.0,
+      ),
       children: options,
     );
   }
