@@ -8,14 +8,17 @@ class SortingDropdown extends StatefulWidget {
 }
 
 class _SortingDropdownState extends State<SortingDropdown> {
-  List<DropdownMenuEntry> dropdownEntrys = [];
+  List<DropdownMenuEntry> dropdownEntrys = [
+    const DropdownMenuEntry(value: 'name_az', label: 'Name A-Z'),
+    const DropdownMenuEntry(value: 'name_za', label: 'Name Z-A'),
+    const DropdownMenuEntry(value: 'newest', label: 'Newest'),
+    const DropdownMenuEntry(value: 'oldest', label: 'Oldest'),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    dropdownEntrys.add(const DropdownMenuEntry(value: 'test', label: 'test'));
-
     return DropdownMenu(
-      initialSelection: 'test',
+      initialSelection: 'name_az',
       dropdownMenuEntries: dropdownEntrys,
     );
   }

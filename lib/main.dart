@@ -1,3 +1,4 @@
+import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:y13_gui_project/stock_status_toggle.dart';
 import 'package:y13_gui_project/sorting_dropdown.dart';
@@ -22,15 +23,22 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  String searchValue = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          leading: const Text('Stor.io'),
-          actions: const [Placeholder()],
+        appBar: EasySearchBar(
+          title: const Text('Stor.io'),
+          onSearch: (value) => setState(() => searchValue = value),
         ),
         body: Column(
           children: [
@@ -43,7 +51,9 @@ class Home extends StatelessWidget {
             ),
             ConstrainedBox(
               constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height - 162),
+                maxHeight: MediaQuery.of(context).size.height - 162,
+                maxWidth: MediaQuery.of(context).size.width,
+              ),
               child: ListView(
                 shrinkWrap: false,
                 children: const [
