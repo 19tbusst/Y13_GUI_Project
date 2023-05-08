@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "553839103651",
+    "firebase_url": "https://y13-gui-project-default-rtdb.firebaseio.com",
+    "project_id": "y13-gui-project",
+    "storage_bucket": "y13-gui-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553839103651:android:72fcfc167796ca981b3916",
+        "android_client_info": {
+          "package_name": "com.example.y13_gui_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "553839103651-03clpmdmskk608c15fr7t8mfh9fi3ml8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1aGIC-ekvA4AmWnQumFNZcyQmOZUQvso"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "553839103651-03clpmdmskk608c15fr7t8mfh9fi3ml8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "553839103651-s3kgo8d2vsgddqt3e48f3r1pmr5ld04e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.y13GuiProject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

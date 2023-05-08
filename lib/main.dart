@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:y13_gui_project/Issue/issue.dart';
 import 'package:y13_gui_project/Add/add.dart';
 import 'package:y13_gui_project/Return/return.dart';
+import 'package:y13_gui_project/add_popup.dart';
 import 'package:y13_gui_project/search_bar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -34,7 +42,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0;
+  final int _selectedIndex = 0;
 
   static const List<Widget> _pages = <Widget>[
     Issue(),
@@ -42,28 +50,21 @@ class _HomeState extends State<Home> {
     Add(),
   ];
 
+  Future<void> _addPopup() async {
+    return addPopup(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const SearchBar(),
       body: _pages.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Issue',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.restore),
-            label: 'Return',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Add',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        onPressed: () {
+          _addPopup();
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
