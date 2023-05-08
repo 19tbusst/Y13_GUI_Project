@@ -35,9 +35,9 @@ class _IssueState extends State<Issue> {
   @override
   Widget build(BuildContext context) {
     Item item1 = Item(
-      id: 0,
-      name: 'Item 1',
-      isIssued: true,
+      id: 2,
+      name: 'Item 3',
+      isIssued: false,
       date: DateTime.now(),
       image:
           'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
@@ -51,9 +51,9 @@ class _IssueState extends State<Issue> {
 
       subscription = ref.onValue.listen((event) {
         final data = jsonEncode(event.snapshot.value);
-        subscription.cancel(); // Cancel the subscription after the first event
+        subscription.cancel();
 
-        completer.complete(data); // Complete the Future with the data value
+        completer.complete(data);
       });
 
       return completer.future;
@@ -71,22 +71,6 @@ class _IssueState extends State<Issue> {
       });
     }
 
-    read().then((data) {
-      if (data != null) {
-        setState(() {
-          _items = (jsonDecode(data) as List<dynamic>)
-              .map((e) => Item(
-                    id: e['id'],
-                    name: e['name'],
-                    isIssued: e['isIssued'],
-                    date: DateTime.parse(e['date']),
-                    image: e['image'],
-                  ))
-              .toList();
-        });
-      }
-    });
-
     return Column(
       children: [
         Padding(
@@ -97,6 +81,28 @@ class _IssueState extends State<Issue> {
               const SortingDropdown(),
               const StockStatusToggle(),
               TextButton(onPressed: () => write(item1), child: Text('write')),
+              TextButton(
+                  onPressed: () async {
+                    read().then((data) {
+                      if (data != null) {
+                        final List<dynamic> jsonData = jsonDecode(data);
+                        setState(() {
+                          _items = jsonData
+                              .map((e) => Item(
+                                    id: e['id'] as int,
+                                    name: e['name'] as String,
+                                    isIssued: e['isIssued'] as bool,
+                                    date: DateTime.parse(e['date'] as String),
+                                    image: e['image'] as String,
+                                  ))
+                              .toList();
+                        });
+                      } else {
+                        _items = <Item>[];
+                      }
+                    });
+                  },
+                  child: Text('read')),
             ],
           ),
         ),
