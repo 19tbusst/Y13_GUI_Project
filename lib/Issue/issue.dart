@@ -3,6 +3,8 @@ import 'sorting_dropdown.dart';
 import 'item_card.dart';
 import 'stock_status_toggle.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'dart:async';
+import 'dart:convert';
 
 class Item {
   String name;
@@ -28,6 +30,8 @@ class Issue extends StatefulWidget {
 }
 
 class _IssueState extends State<Issue> {
+  List<Item> _items = <Item>[];
+
   @override
   Widget build(BuildContext context) {
     Item item1 = Item(
@@ -39,12 +43,20 @@ class _IssueState extends State<Issue> {
           'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
     );
 
-    void read(int id) {
-      DatabaseReference ref = FirebaseDatabase.instance.ref('items/$id');
-      ref.onValue.listen((DatabaseEvent event) {
-        final data = event.snapshot.value;
-        print(data);
+    Future<dynamic> read() async {
+      DatabaseReference ref = FirebaseDatabase.instance.ref('items');
+
+      Completer<dynamic> completer = Completer<dynamic>();
+      late StreamSubscription<DatabaseEvent> subscription;
+
+      subscription = ref.onValue.listen((event) {
+        final data = jsonEncode(event.snapshot.value);
+        subscription.cancel(); // Cancel the subscription after the first event
+
+        completer.complete(data); // Complete the Future with the data value
       });
+
+      return completer.future;
     }
 
     void write(Item item) async {
@@ -55,8 +67,25 @@ class _IssueState extends State<Issue> {
         'isIssued': item.isIssued,
         'date': item.date.toString(),
         'image': item.image,
+        'id': item.id,
       });
     }
+
+    read().then((data) {
+      if (data != null) {
+        setState(() {
+          _items = (jsonDecode(data) as List<dynamic>)
+              .map((e) => Item(
+                    id: e['id'],
+                    name: e['name'],
+                    isIssued: e['isIssued'],
+                    date: DateTime.parse(e['date']),
+                    image: e['image'],
+                  ))
+              .toList();
+        });
+      }
+    });
 
     return Column(
       children: [
@@ -67,7 +96,6 @@ class _IssueState extends State<Issue> {
             children: <Widget>[
               const SortingDropdown(),
               const StockStatusToggle(),
-              TextButton(onPressed: () => read(0), child: Text('read')),
               TextButton(onPressed: () => write(item1), child: Text('write')),
             ],
           ),
@@ -79,15 +107,9 @@ class _IssueState extends State<Issue> {
           ),
           child: ListView(
             shrinkWrap: false,
-            children: <ItemCard>[
-              ItemCard(item: item1),
-              ItemCard(item: item1),
-              ItemCard(item: item1),
-              ItemCard(item: item1),
-              ItemCard(item: item1),
-              ItemCard(item: item1),
-              ItemCard(item: item1),
-            ],
+            children: _items.map((item) {
+              return ItemCard(item: item);
+            }).toList(),
           ),
         )
       ],
