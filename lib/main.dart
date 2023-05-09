@@ -50,22 +50,12 @@ class _HomeState extends State<Home> {
     Add(),
   ];
 
-  Future<void> _addPopup() async {
-    return addPopup(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const SearchBar(),
       body: _pages.elementAt(_selectedIndex),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        onPressed: () {
-          _addPopup();
-        },
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: AddPopup(),
     );
   }
 }
