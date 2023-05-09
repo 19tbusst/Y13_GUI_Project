@@ -1,7 +1,24 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 Future addPopup(BuildContext context) {
   final formKey = GlobalKey<FormState>();
+
+  File file = File('');
+
+  void pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      file = File(result.files.single.path!);
+    } else {
+      // User canceled the picker
+    }
+  }
 
   return showDialog(
     context: context,
@@ -24,6 +41,13 @@ Future addPopup(BuildContext context) {
                   decoration: const InputDecoration(
                     hintText: 'Item name',
                   ),
+                ),
+                kIsWeb ? Image.network(file.path) : Image.file(file),
+                TextButton(
+                  onPressed: () {
+                    pickFile();
+                  },
+                  child: const Text('Select Image'),
                 ),
               ],
             ),

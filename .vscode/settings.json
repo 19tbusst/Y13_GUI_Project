@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "/Users/tombu/Development/Code/Flutter/y13_gui_project/linux"
+    "cmake.sourceDirectory": "/Users/tombu/Development/Code/Flutter/y13_gui_project/linux",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
