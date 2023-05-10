@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
-
+import 'package:y13_gui_project/Issue/issue.dart';
 import 'package:y13_gui_project/Add_Popup/image_display.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class AddPopup extends StatefulWidget {
   @override
@@ -14,6 +17,32 @@ class _AddPopupState extends State<AddPopup> {
   File? file;
   String? imageName;
   String? itemName;
+  bool isSubmitted = false;
+
+  Future write(Item item) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("items/");
+
+    await ref.child(item.id.toString()).set({
+      'name': item.name,
+      'isIssued': item.isIssued,
+      'date': item.date.toString(),
+      'image': item.image,
+      'id': item.id,
+    });
+  }
+
+  Future<String> upload(String uuid, File file) async {
+    final storage = FirebaseStorage.instance;
+    final storageRef = FirebaseStorage.instance.ref();
+    final imagesRef = storageRef.child("images");
+    final imageRef = imagesRef.child(uuid);
+
+    await imageRef.putFile(file);
+
+    String url = '';
+    await imageRef.getDownloadURL().then((value) => url = value);
+    return url;
+  }
 
   Future<String?> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -38,11 +67,15 @@ class _AddPopupState extends State<AddPopup> {
     return null;
   }
 
+  String generateUniqueId() {
+    var uuid = Uuid();
+    return uuid.v4();
+  }
+
   Future<void> showAddPopup(BuildContext context) async {
     file = null;
     imageName = null;
     itemName = null;
-    bool isSubmited = false;
 
     await showDialog(
       context: context,
@@ -53,7 +86,7 @@ class _AddPopupState extends State<AddPopup> {
             content: Form(
               key: formKey,
               child: SizedBox(
-                height: 276,
+                height: 298,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -98,7 +131,7 @@ class _AddPopupState extends State<AddPopup> {
                                   ),
                                 ],
                               ),
-                              if (state.errorText != null && isSubmited)
+                              if (state.errorText != null && isSubmitted)
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
@@ -126,14 +159,31 @@ class _AddPopupState extends State<AddPopup> {
             actions: <Widget>[
               TextButton(
                 child: const Text('Add'),
-                onPressed: () {
+                onPressed: () async {
                   if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Item added')),
                     );
+
                     Navigator.of(context).pop();
+
+                    String url = '';
+                    url = await upload(generateUniqueId(), file!);
+
+                    Item item = Item(
+                      id: generateUniqueId(),
+                      name: itemName!,
+                      image: url,
+                      date: DateTime.now(),
+                      isIssued: false,
+                    );
+
+                    await write(item);
                   } else {
-                    isSubmited = true;
+                    setState(() {
+                      isSubmitted = true;
+                    });
                   }
                 },
               ),
