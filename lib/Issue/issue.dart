@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:y13_gui_project/main.dart';
 import 'sorting_dropdown.dart';
 import 'item_card.dart';
 import 'stock_status_toggle.dart';
@@ -51,6 +53,8 @@ class _IssueState extends State<Issue> {
 
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context, listen: false);
+
     read().then((data) {
       if (data != null) {
         final Map<String, dynamic> jsonData = jsonDecode(data);
@@ -90,7 +94,12 @@ class _IssueState extends State<Issue> {
           child: ListView(
             shrinkWrap: false,
             children: _items.map((item) {
-              return ItemCard(item: item);
+              if ((item.isIssued && appState.isShowingIssued) ||
+                  (!item.isIssued && appState.isShowingReturned)) {
+                return ItemCard(item: item);
+              } else {
+                return Container();
+              }
             }).toList(),
           ),
         )

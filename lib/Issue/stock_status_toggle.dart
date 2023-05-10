@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:y13_gui_project/main.dart';
 
 const List<Widget> options = <Widget>[
   Text('In Stock'),
@@ -17,10 +19,17 @@ class _StockStatusToggleState extends State<StockStatusToggle> {
 
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context, listen: false);
+
     return ToggleButtons(
       isSelected: _selectedOptions,
       onPressed: (int index) {
         setState(() {
+          if (index == 1) {
+            appState.setIsShowingIssued();
+          } else {
+            appState.setIsShowingReturned();
+          }
           _selectedOptions[index] = !_selectedOptions[index];
         });
       },

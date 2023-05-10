@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:y13_gui_project/Issue/issue.dart';
@@ -7,13 +8,33 @@ import 'package:y13_gui_project/Return/return.dart';
 import 'package:y13_gui_project/Add_Popup/add_popup.dart';
 import 'package:y13_gui_project/search_bar.dart';
 
+class AppState extends ChangeNotifier {
+  bool isShowingIssued = true;
+  bool isShowingReturned = true;
+
+  void setIsShowingIssued() {
+    isShowingIssued = !isShowingIssued;
+    notifyListeners();
+  }
+
+  void setIsShowingReturned() {
+    isShowingReturned = !isShowingReturned;
+    notifyListeners();
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => AppState(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

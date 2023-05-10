@@ -14,7 +14,7 @@ class ImageDisplay extends StatelessWidget {
         height: 140,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: FileImage(file!),
+            image: FileImage(file),
             fit: BoxFit.fill,
           ),
         ),
