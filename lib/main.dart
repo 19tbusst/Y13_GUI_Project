@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:y13_gui_project/Issue/issue.dart';
+import 'package:y13_gui_project/Issue/home_page.dart';
 import 'package:y13_gui_project/Add/add.dart';
 import 'package:y13_gui_project/Return/return.dart';
 import 'package:y13_gui_project/Add_Popup/add_popup.dart';
@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
   final int _selectedIndex = 0;
 
   static const List<Widget> _pages = <Widget>[
-    Issue(),
+    HomePage(),
     Return(),
     Add(),
   ];

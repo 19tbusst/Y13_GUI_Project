@@ -25,14 +25,14 @@ class Item {
   });
 }
 
-class Issue extends StatefulWidget {
-  const Issue({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<Issue> createState() => _IssueState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _IssueState extends State<Issue> {
+class _HomePageState extends State<HomePage> {
   List<Item> _items = <Item>[];
 
   Future<dynamic> read() async {
