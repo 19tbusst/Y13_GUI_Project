@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
 import 'package:y13_gui_project/Issue/home_page.dart';
 import 'package:y13_gui_project/Add/add.dart';
 import 'package:y13_gui_project/Return/return.dart';
@@ -12,6 +14,8 @@ class AppState extends ChangeNotifier {
   bool isShowingIssued = true;
   bool isShowingReturned = true;
 
+  String sortingMode = 'name_az';
+
   void setIsShowingIssued() {
     isShowingIssued = !isShowingIssued;
     notifyListeners();
@@ -19,6 +23,11 @@ class AppState extends ChangeNotifier {
 
   void setIsShowingReturned() {
     isShowingReturned = !isShowingReturned;
+    notifyListeners();
+  }
+
+  void setSortingMode(String mode) {
+    sortingMode = mode;
     notifyListeners();
   }
 }

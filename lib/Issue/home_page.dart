@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:y13_gui_project/main.dart';
-import 'sorting_dropdown.dart';
-import 'item_card.dart';
-import 'stock_status_toggle.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:firebase_database/firebase_database.dart';
+
+import 'package:y13_gui_project/main.dart';
+import 'stock_status_toggle.dart';
+import 'sorting_dropdown.dart';
+import 'item_card.dart';
 
 class Item {
   String name;
@@ -51,10 +53,23 @@ class _HomePageState extends State<HomePage> {
     return completer.future;
   }
 
+  void sortName(bool invert) {
+    _items.sort((a, b) => a.name.compareTo(b.name));
+    if (invert) {
+      _items = _items.reversed.toList();
+    }
+  }
+
+  void sortDate(bool invert) {
+    _items.sort((a, b) => a.date.compareTo(b.date));
+    if (invert) {
+      _items = _items.reversed.toList();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     AppState appState = Provider.of<AppState>(context, listen: false);
-
     read().then((data) {
       if (data != null) {
         final Map<String, dynamic> jsonData = jsonDecode(data);
@@ -73,6 +88,21 @@ class _HomePageState extends State<HomePage> {
         _items = <Item>[];
       }
     });
+
+    switch (appState.sortingMode) {
+      case 'name_az':
+        sortName(false);
+        break;
+      case 'name_za':
+        sortName(true);
+        break;
+      case 'newest':
+        sortDate(false);
+        break;
+      case 'oldest':
+        sortDate(true);
+        break;
+    }
 
     return Column(
       children: [

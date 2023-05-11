@@ -60,8 +60,7 @@ class _ItemCardState extends State<ItemCard> {
                         Text('${_date.day}/${_date.month}/${_date.year}'),
                         const Spacer(),
                         ElevatedButton(
-                          child:
-                              _isIssued ? Text('Issued') : Text('Not Issued'),
+                          child: _isIssued ? Text('Return') : Text('Issue'),
                           onPressed: () => print(_isIssued),
                         ),
                       ],

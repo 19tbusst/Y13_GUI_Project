@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:y13_gui_project/main.dart';
 
 class SortingDropdown extends StatefulWidget {
   const SortingDropdown({super.key});
@@ -17,9 +20,16 @@ class _SortingDropdownState extends State<SortingDropdown> {
 
   @override
   Widget build(BuildContext context) {
+    AppState appState = Provider.of<AppState>(context, listen: false);
+
     return DropdownMenu(
       initialSelection: 'name_az',
       dropdownMenuEntries: dropdownEntrys,
+      onSelected: (value) {
+        setState(() {
+          appState.setSortingMode(value);
+        });
+      },
     );
   }
 }
