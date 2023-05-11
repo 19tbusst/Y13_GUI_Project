@@ -26,7 +26,6 @@ class _ItemCardState extends State<ItemCard> {
     });
 
     return Card(
-      surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
       elevation: 2.5,
       child: ConstrainedBox(
         constraints: BoxConstraints(
@@ -41,7 +40,15 @@ class _ItemCardState extends State<ItemCard> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(_name),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          _name,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ],
+                    ),
                     const Spacer(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -72,6 +79,7 @@ class _ItemCardState extends State<ItemCard> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
+                width: MediaQuery.of(context).size.width / 4,
                 child: Image(
                   image: NetworkImage(_image),
                 ),
