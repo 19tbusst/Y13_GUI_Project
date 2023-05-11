@@ -72,20 +72,29 @@ class _HomePageState extends State<HomePage> {
     AppState appState = Provider.of<AppState>(context, listen: false);
     read().then((data) {
       if (data != null) {
-        final Map<String, dynamic> jsonData = jsonDecode(data);
-        setState(() {
-          _items = jsonData.values
-              .map((e) => Item(
-                    id: e['id'] as String,
-                    name: e['name'] as String,
-                    isIssued: e['isIssued'] as bool,
-                    date: DateTime.parse(e['date'] as String),
-                    image: e['image'] as String,
-                  ))
-              .toList();
-        });
+        final dynamic jsonData = jsonDecode(data);
+
+        if (jsonData is Map<String, dynamic>) {
+          setState(() {
+            _items = jsonData.values
+                .map((e) => Item(
+                      id: e['id'] as String,
+                      name: e['name'] as String,
+                      isIssued: e['isIssued'] as bool,
+                      date: DateTime.parse(e['date'] as String),
+                      image: e['image'] as String,
+                    ))
+                .toList();
+          });
+        } else {
+          setState(() {
+            _items = <Item>[];
+          });
+        }
       } else {
-        _items = <Item>[];
+        setState(() {
+          _items = <Item>[];
+        });
       }
     });
 
