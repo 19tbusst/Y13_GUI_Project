@@ -33,8 +33,10 @@ class _ItemCardState extends State<ItemCard> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            SizedBox(
-              width: MediaQuery.of(context).size.width - 208,
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width - 224,
+                  maxHeight: 200),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -57,8 +59,9 @@ class _ItemCardState extends State<ItemCard> {
                           color: Theme.of(context).colorScheme.background,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child:
-                                _isIssued ? Text('Issued') : Text('Not Issued'),
+                            child: _isIssued
+                                ? const Text('Issued')
+                                : const Text('Not Issued'),
                           ),
                         ),
                         const SizedBox(
@@ -67,7 +70,9 @@ class _ItemCardState extends State<ItemCard> {
                         Text('${_date.day}/${_date.month}/${_date.year}'),
                         const Spacer(),
                         ElevatedButton(
-                          child: _isIssued ? Text('Return') : Text('Issue'),
+                          child: _isIssued
+                              ? const Text('Return')
+                              : const Text('Issue'),
                           onPressed: () => print(_isIssued),
                         ),
                       ],
@@ -78,9 +83,15 @@ class _ItemCardState extends State<ItemCard> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image(
-                fit: BoxFit.fill,
-                image: NetworkImage(_image),
+              child: SizedBox(
+                width: 200,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(_image),
+                  ),
+                ),
               ),
             ),
           ],
