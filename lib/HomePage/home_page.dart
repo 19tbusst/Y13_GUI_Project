@@ -106,10 +106,10 @@ class _HomePageState extends State<HomePage> {
         sortName(true);
         break;
       case 'newest':
-        sortDate(false);
+        sortDate(true);
         break;
       case 'oldest':
-        sortDate(true);
+        sortDate(false);
         break;
     }
 

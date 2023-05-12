@@ -78,11 +78,9 @@ class _ItemCardState extends State<ItemCard> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width / 4,
-                child: Image(
-                  image: NetworkImage(_image),
-                ),
+              child: Image(
+                fit: BoxFit.fill,
+                image: NetworkImage(_image),
               ),
             ),
           ],

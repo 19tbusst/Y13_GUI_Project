@@ -27,9 +27,13 @@ class _StockStatusToggleState extends State<StockStatusToggle> {
       onPressed: (int index) {
         setState(() {
           if (index == 1) {
-            appState.setIsShowingIssued();
+            setState(() {
+              appState.isShowingIssued = !appState.isShowingIssued;
+            });
           } else {
-            appState.setIsShowingReturned();
+            setState(() {
+              appState.isShowingReturned = !appState.isShowingReturned;
+            });
           }
           _selectedOptions[index] = !_selectedOptions[index];
         });

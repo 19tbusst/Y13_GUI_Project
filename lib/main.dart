@@ -16,16 +16,6 @@ class AppState extends ChangeNotifier {
 
   String sortingMode = 'name_az';
 
-  void setIsShowingIssued() {
-    isShowingIssued = !isShowingIssued;
-    notifyListeners();
-  }
-
-  void setIsShowingReturned() {
-    isShowingReturned = !isShowingReturned;
-    notifyListeners();
-  }
-
   void setSortingMode(String mode) {
     sortingMode = mode;
     notifyListeners();
@@ -41,13 +31,13 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => AppState(),
-      child: const MyApp(),
+      child: const App(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +75,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: const SearchBar(),
       body: _pages.elementAt(_selectedIndex),
-      floatingActionButton: AddPopup(),
+      floatingActionButton: const AddPopup(),
     );
   }
 }
