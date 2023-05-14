@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:easy_search_bar/easy_search_bar.dart';
 import 'firebase_options.dart';
 
 import 'package:y13_gui_project/HomePage/home_page.dart';
 import 'package:y13_gui_project/Add/add.dart';
 import 'package:y13_gui_project/Return/return.dart';
 import 'package:y13_gui_project/Add_Popup/add_popup.dart';
-import 'package:y13_gui_project/search_bar.dart';
+import 'package:y13_gui_project/app_bar.dart';
 
 class AppState extends ChangeNotifier {
   bool isShowingIssued = true;
@@ -64,6 +65,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final int _selectedIndex = 0;
 
+  String _searchValue = '';
+
   static const List<Widget> _pages = <Widget>[
     HomePage(),
     Return(),
@@ -73,7 +76,22 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SearchBar(),
+      appBar: EasySearchBar(
+        title: const Text('Stor.io'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        searchBackgroundColor: Theme.of(context).colorScheme.surface,
+        searchBackIconTheme:
+            IconThemeData(color: Theme.of(context).colorScheme.primary),
+        searchCursorColor: Theme.of(context).colorScheme.primary,
+        searchClearIconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.error,
+        ),
+        searchTextStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+        onSearch: (value) => setState(() => _searchValue = value),
+      ),
       body: _pages.elementAt(_selectedIndex),
       floatingActionButton: const AddPopup(),
     );

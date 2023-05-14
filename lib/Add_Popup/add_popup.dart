@@ -173,7 +173,6 @@ class _AddPopupState extends State<AddPopup> {
                     Navigator.of(context).pop();
 
                     String url = '';
-                    url = await upload(generateUniqueId(), file!);
 
                     Item item = Item(
                       id: generateUniqueId(),
@@ -182,6 +181,9 @@ class _AddPopupState extends State<AddPopup> {
                       date: DateTime.now(),
                       isIssued: false,
                     );
+                    
+                    url = await upload(generateUniqueId(), file!);
+                    item.image = url;
 
                     await write(item);
                   } else {
