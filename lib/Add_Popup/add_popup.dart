@@ -32,6 +32,8 @@ class _AddPopupState extends State<AddPopup> {
       'date': item.date.toString(),
       'image': item.image,
       'id': item.id,
+      'borrowerName': item.borrowerName,
+      'borrowerEmail': item.borrowerEmail,
     });
   }
 
@@ -72,7 +74,7 @@ class _AddPopupState extends State<AddPopup> {
   }
 
   String generateUniqueId() {
-    var uuid = Uuid();
+    var uuid = const Uuid();
     return uuid.v4();
   }
 
@@ -180,8 +182,10 @@ class _AddPopupState extends State<AddPopup> {
                       image: url,
                       date: DateTime.now(),
                       isIssued: false,
+                      borrowerName: '',
+                      borrowerEmail: '',
                     );
-                    
+
                     url = await upload(generateUniqueId(), file!);
                     item.image = url;
 

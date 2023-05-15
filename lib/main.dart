@@ -11,7 +11,6 @@ import 'package:y13_gui_project/HomePage/home_page.dart';
 import 'package:y13_gui_project/Add/add.dart';
 import 'package:y13_gui_project/Return/return.dart';
 import 'package:y13_gui_project/Add_Popup/add_popup.dart';
-import 'package:y13_gui_project/app_bar.dart';
 
 class AppState extends ChangeNotifier {
   bool isShowingIssued = true;
