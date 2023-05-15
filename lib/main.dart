@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'dart:io';
 
+import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
+import 'package:desktop_window/desktop_window.dart';
 import 'firebase_options.dart';
 
 import 'package:y13_gui_project/HomePage/home_page.dart';
@@ -25,6 +27,12 @@ class AppState extends ChangeNotifier {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    await DesktopWindow.setMinWindowSize(
+      const Size(410, 350),
+    );
+  }
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

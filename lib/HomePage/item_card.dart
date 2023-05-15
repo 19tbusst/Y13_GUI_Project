@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'home_page.dart';
 
 class ItemCard extends StatefulWidget {
@@ -49,6 +50,22 @@ class _ItemCardState extends State<ItemCard> {
                           _name,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
+                        const Spacer(),
+                        (MediaQuery.of(context).size.width <= 500)
+                            ? IconButton(
+                                icon: _isIssued
+                                    ? const FaIcon(
+                                        FontAwesomeIcons.solidSquarePlus)
+                                    : const FaIcon(
+                                        FontAwesomeIcons.solidSquareMinus),
+                                color: Theme.of(context).colorScheme.primary,
+                                iconSize: 30,
+                                onPressed: () => print(_isIssued),
+                              )
+                            : ElevatedButton(
+                                child: Text(_isIssued ? 'Issue' : 'Return'),
+                                onPressed: () => print(_isIssued),
+                              ),
                       ],
                     ),
                     const Spacer(),
@@ -69,12 +86,6 @@ class _ItemCardState extends State<ItemCard> {
                         ),
                         Text('${_date.day}/${_date.month}/${_date.year}'),
                         const Spacer(),
-                        ElevatedButton(
-                          child: _isIssued
-                              ? const Text('Return')
-                              : const Text('Issue'),
-                          onPressed: () => print(_isIssued),
-                        ),
                       ],
                     ),
                   ],
