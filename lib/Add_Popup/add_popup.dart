@@ -184,6 +184,7 @@ class _AddPopupState extends State<AddPopup> {
                       isIssued: false,
                       borrowerName: '',
                       borrowerEmail: '',
+                      dueDate: DateTime.now(),
                     );
 
                     url = await upload(generateUniqueId(), file!);

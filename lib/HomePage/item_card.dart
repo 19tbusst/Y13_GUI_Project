@@ -22,6 +22,7 @@ class _ItemCardState extends State<ItemCard> {
   String _borrowerName = '';
   String _borrowerEmail = '';
   String _id = '';
+  DateTime _dueDate = DateTime.now();
 
   bool _isConfirmed = false;
 
@@ -39,6 +40,7 @@ class _ItemCardState extends State<ItemCard> {
       'id': _id,
       'borrowerName': _borrowerName,
       'borrowerEmail': _borrowerEmail,
+      'dueDate': _dueDate.toString(),
     });
   }
 
@@ -104,6 +106,10 @@ class _ItemCardState extends State<ItemCard> {
                               );
 
                               setState(() {
+                                _dueDate = DateTime.now().add(
+                                  const Duration(days: 7),
+                                );
+
                                 _isIssued = true;
                               });
 
@@ -299,6 +305,18 @@ class _ItemCardState extends State<ItemCard> {
                                   children: <Widget>[
                                     Flexible(
                                       child: Text('Email: $_borrowerEmail'),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Flexible(
+                                      child: Text('Due: ${_dueDate.day}/'
+                                          '${_dueDate.month}/${_dueDate.year}'),
                                     )
                                   ],
                                 ),

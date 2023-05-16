@@ -19,6 +19,7 @@ class Item {
   String id;
   String borrowerName;
   String borrowerEmail;
+  DateTime dueDate;
 
   Item({
     required this.id,
@@ -28,6 +29,7 @@ class Item {
     required this.image,
     required this.borrowerName,
     required this.borrowerEmail,
+    required this.dueDate,
   });
 }
 
@@ -89,6 +91,7 @@ class _HomePageState extends State<HomePage> {
                       image: e['image'] as String,
                       borrowerName: e['borrowerName'] as String,
                       borrowerEmail: e['borrowerEmail'] as String,
+                      dueDate: DateTime.parse(e['dueDate'] as String),
                     ))
                 .toList();
           });
