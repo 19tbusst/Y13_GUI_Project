@@ -1,6 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:y13_gui_project/main.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+
+Future<String?> pickFile(context) async {
+  AppState appState = Provider.of<AppState>(context, listen: false);
+
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.image,
+  );
+
+  if (result != null) {
+    File file = File(result.files.single.path!);
+    String imageName = result.files.single.name;
+
+    appState.setFile(file);
+    appState.setImageName(imageName);
+  }
+
+  return null;
+}
 
 imageFormField(imageValidator, pickFile, isSubmitted, setState, context) {
   AppState appState = Provider.of<AppState>(context, listen: false);
@@ -19,8 +39,7 @@ imageFormField(imageValidator, pickFile, isSubmitted, setState, context) {
                 const Text('Image'),
                 TextButton(
                   onPressed: () async {
-                    final String? result = await pickFile();
-                    appState.setResult(result);
+                    final String? result = await pickFile(context);
                     if (result != null) {
                       setState(() {
                         state.reset();

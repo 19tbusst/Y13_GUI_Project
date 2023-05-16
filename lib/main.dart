@@ -28,6 +28,18 @@ class AppState extends ChangeNotifier {
     result = value;
     notifyListeners();
   }
+
+  File? file = File('');
+  void setFile(File? value) {
+    file = value;
+    notifyListeners();
+  }
+
+  String? imageName = '';
+  void setImageName(String? value) {
+    imageName = value;
+    notifyListeners();
+  }
 }
 
 void main() async {

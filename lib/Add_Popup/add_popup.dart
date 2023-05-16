@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:io';
 
@@ -8,6 +8,7 @@ import 'package:y13_gui_project/HomePage/home_page.dart';
 import 'package:y13_gui_project/Add_Popup/image_display.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import '../main.dart';
 import 'image_form_field.dart';
 
 class AddPopup extends StatefulWidget {
@@ -18,9 +19,9 @@ class AddPopup extends StatefulWidget {
 }
 
 class _AddPopupState extends State<AddPopup> {
+  AppState? appState;
+
   final formKey = GlobalKey<FormState>();
-  File? file;
-  String? imageName;
   String? itemName;
   bool isSubmitted = false;
 
@@ -52,24 +53,8 @@ class _AddPopupState extends State<AddPopup> {
     return url;
   }
 
-  Future<String?> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
-    );
-
-    if (result != null) {
-      setState(() {
-        file = File(result.files.single.path!);
-        imageName = result.files.single.name;
-      });
-      return imageName;
-    }
-
-    return null;
-  }
-
   String? imageValidator(String? value) {
-    if (file == null) {
+    if (appState?.file == null) {
       return 'Please choose an image';
     }
     return null;
@@ -81,9 +66,11 @@ class _AddPopupState extends State<AddPopup> {
   }
 
   Future<void> showAddPopup(BuildContext context) async {
-    file = null;
-    imageName = null;
+    appState?.setFile(null);
+    appState?.setImageName(null);
     itemName = null;
+
+    isSubmitted = false;
 
     await showDialog(
       context: context,
@@ -116,7 +103,16 @@ class _AddPopupState extends State<AddPopup> {
                     imageFormField(imageValidator, pickFile, isSubmitted,
                         setState, context),
                     const Spacer(),
-                    if (file != null) ImageDisplay(file: file!)
+                    Consumer<AppState>(
+                      builder: (BuildContext context, AppState appState,
+                          Widget? child) {
+                        if (appState?.file != null) {
+                          return ImageDisplay(file: appState!.file!);
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -146,7 +142,10 @@ class _AddPopupState extends State<AddPopup> {
                       dueDate: DateTime.now(),
                     );
 
-                    url = await upload(generateUniqueId(), file!);
+                    if (appState?.file != null) {
+                      url = await upload(generateUniqueId(), appState!.file!);
+                    }
+
                     item.image = url;
 
                     await write(item);
@@ -167,13 +166,15 @@ class _AddPopupState extends State<AddPopup> {
   @override
   void initState() {
     super.initState();
-    file = null;
-    imageName = null;
+    appState?.setFile(null);
+    appState?.setImageName(null);
     itemName = null;
   }
 
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppState>(context, listen: false);
+
     return FloatingActionButton(
       onPressed: () => showAddPopup(context),
       child: const Icon(Icons.add),
