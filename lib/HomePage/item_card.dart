@@ -23,6 +23,8 @@ class _ItemCardState extends State<ItemCard> {
   String _borrowerEmail = '';
   String _id = '';
 
+  bool _isConfirmed = false;
+
   GlobalKey issueKey = GlobalKey<FormState>();
   GlobalKey returnKey = GlobalKey<FormState>();
 
@@ -91,6 +93,7 @@ class _ItemCardState extends State<ItemCard> {
                           });
                         },
                       ),
+                      const Spacer(),
                       TextButton(
                           onPressed: () async {
                             if ((issueKey.currentState! as FormState)
@@ -109,7 +112,10 @@ class _ItemCardState extends State<ItemCard> {
                               await write();
                             } else {}
                           },
-                          child: const Text('Submit')),
+                          child: const Text(
+                            'Issue',
+                            style: TextStyle(fontSize: 17),
+                          )),
                     ],
                   ),
                 ),
@@ -122,6 +128,8 @@ class _ItemCardState extends State<ItemCard> {
   }
 
   Future<void> showReturnPopup(BuildContext context) async {
+    _isConfirmed = false;
+
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -134,8 +142,58 @@ class _ItemCardState extends State<ItemCard> {
                 child: SizedBox(
                   height: 298,
                   child: Column(
-                    children: const <Widget>[
-                      Placeholder(),
+                    children: <Widget>[
+                      CheckboxListTile(
+                        title: const Text('Confirm Return'),
+                        value: _isConfirmed,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isConfirmed = value!;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity.trailing,
+                      ),
+                      Spacer(),
+                      TextButton(
+                        style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all<Color>(
+                            _isConfirmed
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withAlpha(20)
+                                : Colors.transparent,
+                          ),
+                        ),
+                        onPressed: () async {
+                          if (_isConfirmed) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Item Returned')),
+                            );
+
+                            setState(() {
+                              _isIssued = false;
+                              _borrowerName = '';
+                              _borrowerEmail = '';
+                            });
+
+                            Navigator.of(context).pop();
+
+                            await write();
+                          } else {}
+                        },
+                        child: Text(
+                          'Return',
+                          style: TextStyle(
+                              color: _isConfirmed
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.grey,
+                              fontSize: 17),
+                        ),
+                      ),
                     ],
                   ),
                 ),
