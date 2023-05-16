@@ -134,7 +134,7 @@ class _ItemCardState extends State<ItemCard> {
                 child: SizedBox(
                   height: 298,
                   child: Column(
-                    children: <Widget>[
+                    children: const <Widget>[
                       Placeholder(),
                     ],
                   ),
@@ -148,8 +148,7 @@ class _ItemCardState extends State<ItemCard> {
   }
 
   @override
-  void initState() {
-    super.initState();
+  Widget build(BuildContext context) {
     _name = widget.item.name;
     _isIssued = widget.item.isIssued;
     _date = widget.item.date;
@@ -157,10 +156,7 @@ class _ItemCardState extends State<ItemCard> {
     _borrowerName = widget.item.borrowerName;
     _borrowerEmail = widget.item.borrowerEmail;
     _id = widget.item.id;
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Card(
       elevation: 2.5,
       child: ConstrainedBox(
@@ -197,7 +193,7 @@ class _ItemCardState extends State<ItemCard> {
                                             FontAwesomeIcons.solidSquareMinus),
                                     color:
                                         Theme.of(context).colorScheme.primary,
-                                    iconSize: 30,
+                                    iconSize: 28,
                                     onPressed: () {
                                       if (_isIssued) {
                                         showReturnPopup(context);
@@ -206,15 +202,19 @@ class _ItemCardState extends State<ItemCard> {
                                       }
                                     },
                                   )
-                                : ElevatedButton(
-                                    child: Text(_isIssued ? 'Issue' : 'Return'),
-                                    onPressed: () {
-                                      if (_isIssued) {
-                                        showReturnPopup(context);
-                                      } else {
-                                        showIssuePopup(context);
-                                      }
-                                    },
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ElevatedButton(
+                                      child:
+                                          Text(_isIssued ? 'Return' : 'Issue'),
+                                      onPressed: () {
+                                        if (_isIssued) {
+                                          showReturnPopup(context);
+                                        } else {
+                                          showIssuePopup(context);
+                                        }
+                                      },
+                                    ),
                                   ),
                           ],
                         ),
