@@ -8,6 +8,7 @@ import 'package:y13_gui_project/HomePage/home_page.dart';
 import 'package:y13_gui_project/Add_Popup/image_display.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'image_form_field.dart';
 
 class AddPopup extends StatefulWidget {
   const AddPopup({super.key});
@@ -34,6 +35,7 @@ class _AddPopupState extends State<AddPopup> {
       'id': item.id,
       'borrowerName': item.borrowerName,
       'borrowerEmail': item.borrowerEmail,
+      'dueDate': item.dueDate.toString(),
     });
   }
 
@@ -111,51 +113,8 @@ class _AddPopupState extends State<AddPopup> {
                       ),
                     ),
                     const SizedBox(height: 30),
-                    FormField<String>(
-                      validator: imageValidator,
-                      autovalidateMode: AutovalidateMode.always,
-                      builder: (FormFieldState<String> state) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text('Image'),
-                                  TextButton(
-                                    onPressed: () async {
-                                      String? result = await pickFile();
-                                      if (result != null) {
-                                        setState(() {
-                                          state.reset();
-                                        });
-                                      }
-                                    },
-                                    child: const Text('Choose image'),
-                                  ),
-                                ],
-                              ),
-                              if (state.errorText != null && isSubmitted)
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      state.errorText ?? '',
-                                      style: TextStyle(
-                                        color:
-                                            Theme.of(context).colorScheme.error,
-                                        fontSize: 12.2,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
+                    imageFormField(imageValidator, pickFile, isSubmitted,
+                        setState, context),
                     const Spacer(),
                     if (file != null) ImageDisplay(file: file!)
                   ],

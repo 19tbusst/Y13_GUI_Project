@@ -22,6 +22,12 @@ class AppState extends ChangeNotifier {
     sortingMode = mode;
     notifyListeners();
   }
+
+  String? result = '';
+  void setResult(String? value) {
+    result = value;
+    notifyListeners();
+  }
 }
 
 void main() async {
@@ -70,15 +76,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final int _selectedIndex = 0;
-
   String _searchValue = '';
-
-  static const List<Widget> _pages = <Widget>[
-    HomePage(),
-    Return(),
-    Add(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +97,7 @@ class _HomeState extends State<Home> {
         ),
         onSearch: (value) => setState(() => _searchValue = value),
       ),
-      body: _pages.elementAt(_selectedIndex),
+      body: const HomePage(),
       floatingActionButton: const AddPopup(),
     );
   }
