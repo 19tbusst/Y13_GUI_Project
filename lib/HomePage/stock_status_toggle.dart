@@ -1,8 +1,11 @@
+// Flutter package imports
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// local files
 import 'package:y13_gui_project/main.dart';
 
+// toggle button options
 const List<Widget> options = <Widget>[
   Text('In Stock'),
   Text('Issued'),
@@ -16,6 +19,7 @@ class StockStatusToggle extends StatefulWidget {
 }
 
 class _StockStatusToggleState extends State<StockStatusToggle> {
+  // sets the initial state of the toggle buttons
   final List<bool> _selectedOptions = <bool>[true, true];
 
   @override
@@ -24,6 +28,7 @@ class _StockStatusToggleState extends State<StockStatusToggle> {
 
     return ToggleButtons(
       isSelected: _selectedOptions,
+      // changes the state of the toggle buttons
       onPressed: (int index) {
         setState(() {
           if (index == 1) {

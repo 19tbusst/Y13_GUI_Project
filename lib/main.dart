@@ -5,14 +5,13 @@ import 'dart:io';
 // Pub packages
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:desktop_window/desktop_window.dart';
-import 'package:y13_gui_project/seatch_bar.dart';
 
 // Local files
 import 'firebase_options.dart';
 import 'package:y13_gui_project/HomePage/home_page.dart';
 import 'package:y13_gui_project/Add_Popup/add_popup.dart';
+import 'package:y13_gui_project/search_bar.dart';
 
 class AppState extends ChangeNotifier {
   // Allows filtering of items across files
@@ -28,6 +27,29 @@ class AppState extends ChangeNotifier {
     file = value;
     notifyListeners();
   }
+}
+
+// Item class
+class Item {
+  String name;
+  bool isIssued;
+  DateTime date;
+  String image;
+  String id;
+  String borrowerName;
+  String borrowerEmail;
+  DateTime dueDate;
+
+  Item({
+    required this.id,
+    required this.name,
+    required this.isIssued,
+    required this.date,
+    required this.image,
+    required this.borrowerName,
+    required this.borrowerEmail,
+    required this.dueDate,
+  });
 }
 
 void main() async {
@@ -81,6 +103,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
+    // Main app
     return const Scaffold(
       appBar: SearchBar(),
       body: HomePage(),

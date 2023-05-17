@@ -1,9 +1,12 @@
+// Flutter packages
 import 'package:flutter/material.dart';
+
+// Pub packages
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:uuid/uuid.dart';
 import 'package:firebase_database/firebase_database.dart';
+
+// Local files
 import 'package:y13_gui_project/main.dart';
-import 'home_page.dart';
 
 class ItemCard extends StatefulWidget {
   ItemCard({super.key, required this.item});
@@ -15,6 +18,7 @@ class ItemCard extends StatefulWidget {
 }
 
 class _ItemCardState extends State<ItemCard> {
+  // Card properties
   String _name = '';
   bool _isIssued = false;
   DateTime _date = DateTime.now();
@@ -24,11 +28,13 @@ class _ItemCardState extends State<ItemCard> {
   String _id = '';
   DateTime _dueDate = DateTime.now();
 
+  // Popup properties
   bool _isConfirmed = false;
 
+  // Form key
   GlobalKey issueKey = GlobalKey<FormState>();
-  GlobalKey returnKey = GlobalKey<FormState>();
 
+  // writes the item to the database
   Future write() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("items/");
 
@@ -44,6 +50,7 @@ class _ItemCardState extends State<ItemCard> {
     });
   }
 
+  // issue popup
   Future<void> showIssuePopup(BuildContext context) async {
     await showDialog(
       context: context,
@@ -58,6 +65,7 @@ class _ItemCardState extends State<ItemCard> {
                   height: 298,
                   child: Column(
                     children: <Widget>[
+                      // Borrower name
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Borrower name',
@@ -74,10 +82,12 @@ class _ItemCardState extends State<ItemCard> {
                           });
                         },
                       ),
+                      // Borrower email
                       TextFormField(
                         decoration: const InputDecoration(
                           labelText: 'Email',
                         ),
+                        // checks if the email is valid
                         validator: (value) {
                           // regex from https://regexr.com/3e48o
                           RegExp regex =
@@ -96,8 +106,10 @@ class _ItemCardState extends State<ItemCard> {
                         },
                       ),
                       const Spacer(),
+                      // submit button
                       TextButton(
                           onPressed: () async {
+                            // checks if the form is valid
                             if ((issueKey.currentState! as FormState)
                                 .validate()) {
                               (issueKey.currentState! as FormState).save();
@@ -105,6 +117,7 @@ class _ItemCardState extends State<ItemCard> {
                                 const SnackBar(content: Text('Item Issued')),
                               );
 
+                              // sets the due date to 7 days from now
                               setState(() {
                                 _dueDate = DateTime.now().add(
                                   const Duration(days: 7),
@@ -133,6 +146,7 @@ class _ItemCardState extends State<ItemCard> {
     );
   }
 
+  // return popup
   Future<void> showReturnPopup(BuildContext context) async {
     _isConfirmed = false;
 
@@ -144,17 +158,18 @@ class _ItemCardState extends State<ItemCard> {
             return AlertDialog(
               title: const Text('Return Item'),
               content: Form(
-                key: returnKey,
                 child: SizedBox(
                   height: 298,
                   child: Column(
                     children: <Widget>[
+                      // confirm return checkbox
                       CheckboxListTile(
                         title: const Text('Confirm Return'),
                         value: _isConfirmed,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
+                        // update checkbox value
                         onChanged: (bool? value) {
                           setState(() {
                             _isConfirmed = value!;
@@ -162,7 +177,8 @@ class _ItemCardState extends State<ItemCard> {
                         },
                         controlAffinity: ListTileControlAffinity.trailing,
                       ),
-                      Spacer(),
+                      const Spacer(),
+                      // submit form
                       TextButton(
                         style: ButtonStyle(
                           overlayColor: MaterialStateProperty.all<Color>(
@@ -174,12 +190,14 @@ class _ItemCardState extends State<ItemCard> {
                                 : Colors.transparent,
                           ),
                         ),
+                        // submit form if checkbox is checked
                         onPressed: () async {
                           if (_isConfirmed) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Item Returned')),
                             );
 
+                            // reset item properties
                             setState(() {
                               _isIssued = false;
                               _borrowerName = '';
@@ -213,6 +231,7 @@ class _ItemCardState extends State<ItemCard> {
 
   @override
   Widget build(BuildContext context) {
+    // item properties
     _name = widget.item.name;
     _isIssued = widget.item.isIssued;
     _date = widget.item.date;
@@ -221,6 +240,7 @@ class _ItemCardState extends State<ItemCard> {
     _borrowerEmail = widget.item.borrowerEmail;
     _id = widget.item.id;
 
+    // return date
     return Card(
       elevation: 2.5,
       child: ConstrainedBox(
@@ -248,8 +268,10 @@ class _ItemCardState extends State<ItemCard> {
                         const Spacer(),
                         Column(
                           children: [
+                            // swaps the icon depending on the screen size
                             (MediaQuery.of(context).size.width <= 500)
                                 ? IconButton(
+                                    // swaps the icon depending on the item status
                                     icon: _isIssued
                                         ? const FaIcon(
                                             FontAwesomeIcons.solidSquarePlus)
@@ -270,6 +292,7 @@ class _ItemCardState extends State<ItemCard> {
                                     padding: const EdgeInsets.all(8.0),
                                     child: ElevatedButton(
                                       child:
+                                          // swaps the text depending on the item status
                                           Text(_isIssued ? 'Return' : 'Issue'),
                                       onPressed: () {
                                         if (_isIssued) {
@@ -315,6 +338,7 @@ class _ItemCardState extends State<ItemCard> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
                                     Flexible(
+                                      // converts the due date to a string
                                       child: Text('Due: ${_dueDate.day}/'
                                           '${_dueDate.month}/${_dueDate.year}'),
                                     )
@@ -337,6 +361,7 @@ class _ItemCardState extends State<ItemCard> {
                         const SizedBox(
                           width: 8,
                         ),
+                        // converts the date to a string
                         Text('${_date.day}/${_date.month}/${_date.year}'),
                         const Spacer(),
                       ],
@@ -345,6 +370,7 @@ class _ItemCardState extends State<ItemCard> {
                 ),
               ),
             ),
+            // item image display
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(

@@ -4,6 +4,7 @@ import 'package:easy_search_bar/easy_search_bar.dart';
 class SearchBar extends StatelessWidget implements PreferredSizeWidget {
   const SearchBar({Key? key}) : super(key: key);
 
+  // appBar height
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
@@ -14,7 +15,10 @@ class SearchBar extends StatelessWidget implements PreferredSizeWidget {
     return PreferredSize(
       preferredSize: preferredSize,
       child: SizedBox(
-        height: 56,
+        // set height of appBar
+        height: preferredSize.height,
+
+        // SearchBar widget
         child: EasySearchBar(
           title: const Text('Stor.io'),
           backgroundColor: colorScheme.primary,
@@ -31,6 +35,7 @@ class SearchBar extends StatelessWidget implements PreferredSizeWidget {
             color: colorScheme.onSurface,
           ),
           onSearch: (value) {
+            // TODO: Implement search
             print(value);
           },
         ),

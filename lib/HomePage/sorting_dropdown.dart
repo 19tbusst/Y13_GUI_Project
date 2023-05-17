@@ -11,6 +11,7 @@ class SortingDropdown extends StatefulWidget {
 }
 
 class _SortingDropdownState extends State<SortingDropdown> {
+  // dropdown menu entries
   List<DropdownMenuEntry> dropdownEntrys = [
     const DropdownMenuEntry(value: 'name_az', label: 'Name A-Z'),
     const DropdownMenuEntry(value: 'name_za', label: 'Name Z-A'),
@@ -22,6 +23,7 @@ class _SortingDropdownState extends State<SortingDropdown> {
   Widget build(BuildContext context) {
     AppState appState = Provider.of<AppState>(context, listen: false);
 
+    // changes the dropdown menu entries based on the sorting mode
     return DropdownMenu(
       initialSelection: 'name_az',
       dropdownMenuEntries: dropdownEntrys,
