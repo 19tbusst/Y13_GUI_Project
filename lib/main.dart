@@ -28,6 +28,20 @@ class AppState extends ChangeNotifier {
     file = value;
     notifyListeners();
   }
+
+  // Search query
+  String searchQuery = '';
+  void setSearchQuery(String value) {
+    searchQuery = value;
+    notifyListeners();
+  }
+
+  // Search suggestions
+  List<String> searchSuggestions = [];
+  void setSearchSuggestions(List<String> value) {
+    searchSuggestions = value;
+    notifyListeners();
+  }
 }
 
 // Item class

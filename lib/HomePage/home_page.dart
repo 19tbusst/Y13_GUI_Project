@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
 
       completer.complete(data);
     });
-    
+
     return completer.future;
   }
 
@@ -64,45 +64,57 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // maps items from the database
+  Future<List<Item>> mapItems() async {
+    final data = await read();
+
+    // if data is null, return an empty list
+    if (data == null) {
+      return <Item>[];
+    }
+
+    final dynamic jsonData = jsonDecode(data);
+
+    // if jsonData is not a Map, return an empty list
+    if (jsonData is! Map<String, dynamic>) {
+      return <Item>[];
+    }
+
+    // if jsonData is a Map, return the list of mapped items
+    List<Item> items = jsonData.values
+        .map((e) => Item(
+              id: e['id'] as String,
+              name: e['name'] as String,
+              isIssued: e['isIssued'] as bool,
+              date: DateTime.parse(e['date'] as String),
+              image: e['image'] as String,
+              borrowerName: e['borrowerName'] as String,
+              borrowerEmail: e['borrowerEmail'] as String,
+              dueDate: DateTime.parse(e['dueDate'] as String),
+            ))
+        .toList();
+
+    List<String> suggestions = items.map((e) => e.name).toList();
+    Provider.of<AppState>(context, listen: false)
+        .setSearchSuggestions(suggestions);
+
+    return items;
+  }
+
+  // calls mapItems() and updates the items list on future completion
+  void updateItems() async {
+    List<Item> items = await mapItems();
+    setState(() {
+      _items = items;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     AppState appState = Provider.of<AppState>(context, listen: false);
 
-    // reads items from the database
-    read().then((data) {
-
-      // if data is not null, decode it and set the items list
-      if (data != null) {
-        final dynamic jsonData = jsonDecode(data);
-
-        if (jsonData is Map<String, dynamic>) {
-          setState(() {
-            _items = jsonData.values
-                .map((e) => Item(
-                      id: e['id'] as String,
-                      name: e['name'] as String,
-                      isIssued: e['isIssued'] as bool,
-                      date: DateTime.parse(e['date'] as String),
-                      image: e['image'] as String,
-                      borrowerName: e['borrowerName'] as String,
-                      borrowerEmail: e['borrowerEmail'] as String,
-                      dueDate: DateTime.parse(e['dueDate'] as String),
-                    ))
-                .toList();
-          });
-        } else {
-          // if jsonData is not a Map, set the items list to an empty list
-          setState(() {
-            _items = <Item>[];
-          });
-        }
-      } else {
-        // if data is null, set the items list to an empty list
-        setState(() {
-          _items = <Item>[];
-        });
-      }
-    });
+    // update items
+    updateItems();
 
     // sort items based on sorting mode
     switch (appState.sortingMode) {
@@ -128,7 +140,7 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             // sorting dropdown and stock status toggle
-            children: const <Widget>[ 
+            children: const <Widget>[
               SortingDropdown(),
               StockStatusToggle(),
             ],
@@ -143,14 +155,24 @@ class _HomePageState extends State<HomePage> {
             shrinkWrap: false,
             // maps items to ItemCards
             children: _items.map((item) {
-              // hides items that are toggled off
-              if ((item.isIssued && appState.isShowingIssued) ||
-                  (!item.isIssued && appState.isShowingReturned)) {
-                // pass the item to the ItemCard
-                return ItemCard(item: item);
-              } else {
+              // Only show items that match the search query
+              String search = appState.searchQuery.toLowerCase();
+              bool isSearched = item.name.toLowerCase().startsWith(search);
+
+              if (!isSearched && appState.searchQuery.isNotEmpty) {
                 return Container();
               }
+
+              // hides items that are toggled off
+              bool isStockToggle = !item.isIssued && appState.isShowingReturned;
+              bool isIssueToggle = item.isIssued && appState.isShowingIssued;
+
+              if (!isIssueToggle && !isStockToggle) {
+                // pass the item to the ItemCard
+                return Container();
+              }
+
+              return ItemCard(item: item);
             }).toList(),
           ),
         )

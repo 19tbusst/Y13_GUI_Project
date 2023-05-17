@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 
 // Pub packages
 import 'package:easy_search_bar/easy_search_bar.dart';
+import 'package:provider/provider.dart';
+
+// Local fields
+import 'package:y13_gui_project/main.dart';
 
 class SearchBar extends StatelessWidget implements PreferredSizeWidget {
   const SearchBar({Key? key}) : super(key: key);
@@ -14,6 +18,7 @@ class SearchBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     ColorScheme colorScheme = Theme.of(context).colorScheme;
+    AppState appState = Provider.of<AppState>(context);
 
     return PreferredSize(
       preferredSize: preferredSize,
@@ -37,9 +42,9 @@ class SearchBar extends StatelessWidget implements PreferredSizeWidget {
           searchTextStyle: TextStyle(
             color: colorScheme.onSurface,
           ),
+          suggestions: appState.searchSuggestions,
           onSearch: (value) {
-            // TODO: Implement search
-            print(value);
+            appState.setSearchQuery(value);
           },
         ),
       ),
