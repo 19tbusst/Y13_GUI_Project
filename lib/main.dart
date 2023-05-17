@@ -1,4 +1,5 @@
 // Dart packages
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -52,15 +53,22 @@ class Item {
   });
 }
 
-void main() async {
+void main() {
   // Set minimum window size for desktop
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    await DesktopWindow.setMinWindowSize(
-      const Size(410, 350),
-    );
+  if (!kIsWeb) {
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      DesktopWindow.setMinWindowSize(
+        const Size(410, 350),
+      );
+    }
   }
 
+  // Run the asynchronous initialization function
+  initializeAppAndRun();
+}
+
+Future<void> initializeAppAndRun() async {
   // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
