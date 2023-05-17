@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Dart packages
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 // Pub packages
 import 'package:provider/provider.dart';
@@ -132,6 +133,8 @@ class _HomePageState extends State<HomePage> {
         break;
     }
 
+    int offsetHeight = Platform.isIOS || Platform.isAndroid ? 188 : 120;
+
     // return the home page
     return Column(
       children: [
@@ -148,7 +151,7 @@ class _HomePageState extends State<HomePage> {
         ),
         ConstrainedBox(
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height - 120,
+            maxHeight: MediaQuery.of(context).size.height - offsetHeight,
             maxWidth: MediaQuery.of(context).size.width,
           ),
           child: ListView(
