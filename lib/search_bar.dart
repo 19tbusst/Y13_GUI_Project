@@ -1,4 +1,7 @@
+// Flutter imports
 import 'package:flutter/material.dart';
+
+// Pub packages
 import 'package:easy_search_bar/easy_search_bar.dart';
 
 class SearchBar extends StatelessWidget implements PreferredSizeWidget {

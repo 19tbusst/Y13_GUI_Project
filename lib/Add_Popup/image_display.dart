@@ -1,3 +1,4 @@
+// Flutter imports
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -8,6 +9,7 @@ class ImageDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Displays image
     return Center(
       child: Container(
         width: 140,

@@ -1,15 +1,17 @@
+// Flutter packages
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:uuid/uuid.dart';
 import 'dart:io';
 
-import 'package:y13_gui_project/HomePage/home_page.dart';
+// Pub packages
+import 'package:uuid/uuid.dart';
+import 'package:provider/provider.dart';
+
+// local files
 import 'package:y13_gui_project/Add_Popup/image_display.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import '../main.dart';
-import 'image_form_field.dart';
+import 'package:y13_gui_project/Add_Popup/image_form_field.dart';
+import 'package:y13_gui_project/main.dart';
 
 class AddPopup extends StatefulWidget {
   const AddPopup({super.key});
@@ -25,6 +27,7 @@ class _AddPopupState extends State<AddPopup> {
   String? itemName;
   bool isSubmitted = false;
 
+  // Writes item to Firebase
   Future write(Item item) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("items/");
 
@@ -40,19 +43,22 @@ class _AddPopupState extends State<AddPopup> {
     });
   }
 
+  // Uploads image to Firebase Storage
   Future<String> upload(String uuid, File file) async {
-    final storage = FirebaseStorage.instance;
     final storageRef = FirebaseStorage.instance.ref();
     final imagesRef = storageRef.child("images");
     final imageRef = imagesRef.child(uuid);
 
+    // Upload image
     await imageRef.putFile(file);
-
+    
+    // Get image URL
     String url = '';
     await imageRef.getDownloadURL().then((value) => url = value);
     return url;
   }
 
+  // Validates image
   String? imageValidator(String? value) {
     if (appState?.file == null) {
       return 'Please choose an image';
@@ -60,11 +66,13 @@ class _AddPopupState extends State<AddPopup> {
     return null;
   }
 
+  // Generates unique ID for item
   String generateUniqueId() {
     var uuid = const Uuid();
     return uuid.v4();
   }
 
+  // Add item popup
   Future<void> showAddPopup(BuildContext context) async {
     appState?.setFile(null);
     itemName = null;
@@ -85,6 +93,7 @@ class _AddPopupState extends State<AddPopup> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     TextFormField(
+                      // validates item name
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a valid name';
@@ -99,14 +108,16 @@ class _AddPopupState extends State<AddPopup> {
                       ),
                     ),
                     const SizedBox(height: 30),
+                    // image form field
                     imageFormField(imageValidator, pickFile, isSubmitted,
                         setState, context),
                     const Spacer(),
                     Consumer<AppState>(
                       builder: (BuildContext context, AppState appState,
                           Widget? child) {
-                        if (appState?.file != null) {
-                          return ImageDisplay(file: appState!.file!);
+                        // displays image
+                        if (appState.file != null) {
+                          return ImageDisplay(file: appState.file!);
                         } else {
                           return const SizedBox();
                         }
@@ -120,6 +131,7 @@ class _AddPopupState extends State<AddPopup> {
               TextButton(
                 child: const Text('Add'),
                 onPressed: () async {
+                  // validates form
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -130,6 +142,7 @@ class _AddPopupState extends State<AddPopup> {
 
                     String url = '';
 
+                    // generates new item
                     Item item = Item(
                       id: generateUniqueId(),
                       name: itemName!,
@@ -141,12 +154,14 @@ class _AddPopupState extends State<AddPopup> {
                       dueDate: DateTime.now(),
                     );
 
+                    // uploads image
                     if (appState?.file != null) {
                       url = await upload(generateUniqueId(), appState!.file!);
                     }
 
                     item.image = url;
 
+                    // writes item to Firebase
                     await write(item);
                   } else {
                     setState(() {
@@ -162,6 +177,7 @@ class _AddPopupState extends State<AddPopup> {
     );
   }
 
+  // resets properties
   @override
   void initState() {
     super.initState();
@@ -169,6 +185,7 @@ class _AddPopupState extends State<AddPopup> {
     itemName = null;
   }
 
+  // Builds floating action button
   @override
   Widget build(BuildContext context) {
     appState = Provider.of<AppState>(context, listen: false);
