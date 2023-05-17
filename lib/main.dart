@@ -1,48 +1,37 @@
+// Dart packages
 import 'package:flutter/material.dart';
 import 'dart:io';
 
+// Pub packages
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:desktop_window/desktop_window.dart';
-import 'firebase_options.dart';
+import 'package:y13_gui_project/seatch_bar.dart';
 
+// Local files
+import 'firebase_options.dart';
 import 'package:y13_gui_project/HomePage/home_page.dart';
-import 'package:y13_gui_project/Add/add.dart';
-import 'package:y13_gui_project/Return/return.dart';
 import 'package:y13_gui_project/Add_Popup/add_popup.dart';
 
 class AppState extends ChangeNotifier {
+  // Allows filtering of items across files
   bool isShowingIssued = true;
   bool isShowingReturned = true;
 
+  // Changes sorting mode across files
   String sortingMode = 'name_az';
 
-  void setSortingMode(String mode) {
-    sortingMode = mode;
-    notifyListeners();
-  }
-
-  String? result = '';
-  void setResult(String? value) {
-    result = value;
-    notifyListeners();
-  }
-
+  // File uploaded via image popup form
   File? file = File('');
   void setFile(File? value) {
     file = value;
     notifyListeners();
   }
-
-  String? imageName = '';
-  void setImageName(String? value) {
-    imageName = value;
-    notifyListeners();
-  }
 }
 
 void main() async {
+  // Set minimum window size for desktop
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     await DesktopWindow.setMinWindowSize(
@@ -50,11 +39,13 @@ void main() async {
     );
   }
 
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   runApp(
+    // Provider for state management
     ChangeNotifierProvider(
       create: (context) => AppState(),
       child: const App(),
@@ -88,29 +79,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String _searchValue = '';
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: EasySearchBar(
-        title: const Text('Stor.io'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        searchBackgroundColor: Theme.of(context).colorScheme.surface,
-        searchBackIconTheme:
-            IconThemeData(color: Theme.of(context).colorScheme.primary),
-        searchCursorColor: Theme.of(context).colorScheme.primary,
-        searchClearIconTheme: IconThemeData(
-          color: Theme.of(context).colorScheme.error,
-        ),
-        searchTextStyle: TextStyle(
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
-        onSearch: (value) => setState(() => _searchValue = value),
-      ),
-      body: const HomePage(),
-      floatingActionButton: const AddPopup(),
+    return const Scaffold(
+      appBar: SearchBar(),
+      body: HomePage(),
+      floatingActionButton: AddPopup(),
     );
   }
 }

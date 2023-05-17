@@ -67,7 +67,6 @@ class _AddPopupState extends State<AddPopup> {
 
   Future<void> showAddPopup(BuildContext context) async {
     appState?.setFile(null);
-    appState?.setImageName(null);
     itemName = null;
 
     isSubmitted = false;
@@ -167,7 +166,6 @@ class _AddPopupState extends State<AddPopup> {
   void initState() {
     super.initState();
     appState?.setFile(null);
-    appState?.setImageName(null);
     itemName = null;
   }
 

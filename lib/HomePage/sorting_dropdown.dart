@@ -27,7 +27,7 @@ class _SortingDropdownState extends State<SortingDropdown> {
       dropdownMenuEntries: dropdownEntrys,
       onSelected: (value) {
         setState(() {
-          appState.setSortingMode(value);
+          appState.sortingMode = value;
         });
       },
     );

@@ -13,18 +13,14 @@ Future<String?> pickFile(context) async {
 
   if (result != null) {
     File file = File(result.files.single.path!);
-    String imageName = result.files.single.name;
 
     appState.setFile(file);
-    appState.setImageName(imageName);
   }
 
   return null;
 }
 
 imageFormField(imageValidator, pickFile, isSubmitted, setState, context) {
-  AppState appState = Provider.of<AppState>(context, listen: false);
-
   return FormField<String>(
     validator: imageValidator,
     autovalidateMode: AutovalidateMode.always,
