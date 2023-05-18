@@ -57,10 +57,10 @@ class _ItemCardState extends State<ItemCard> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return SingleChildScrollView(
-              child: AlertDialog(
-                title: const Text('Issue Item'),
-                content: Form(
+            return AlertDialog(
+              title: const Text('Issue Item'),
+              content: SingleChildScrollView(
+                child: Form(
                   key: issueKey,
                   child: SizedBox(
                     height: 298,
@@ -157,10 +157,10 @@ class _ItemCardState extends State<ItemCard> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return SingleChildScrollView(
-              child: AlertDialog(
-                title: const Text('Return Item'),
-                content: Form(
+            return AlertDialog(
+              title: const Text('Return Item'),
+              content: SingleChildScrollView(
+                child: Form(
                   child: SizedBox(
                     height: 298,
                     child: Column(

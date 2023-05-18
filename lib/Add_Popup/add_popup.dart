@@ -78,10 +78,10 @@ class _AddPopupState extends State<AddPopup> {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
-          return SingleChildScrollView(
-            child: AlertDialog(
-              title: const Text('Add Item'),
-              content: Form(
+          return AlertDialog(
+            title: const Text('Add Item'),
+            content: SingleChildScrollView(
+              child: Form(
                 key: formKey,
                 child: SizedBox(
                   height: 298,
@@ -123,56 +123,56 @@ class _AddPopupState extends State<AddPopup> {
                   ),
                 ),
               ),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Add'),
-                  onPressed: () async {
-                    // validates form
-                    if (formKey.currentState!.validate()) {
-                      formKey.currentState!.save();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Item added')),
-                      );
-
-                      Navigator.of(context).pop();
-
-                      String url = '';
-
-                      // generates new item
-                      Item item = Item(
-                        id: generateUniqueId(),
-                        name: itemName!,
-                        image: url,
-                        date: DateTime.now(),
-                        isIssued: false,
-                        borrowerName: '',
-                        borrowerEmail: '',
-                        dueDate: DateTime.now(),
-                      );
-
-                      // uploads image
-                      if (appState?.file != null) {
-                        url = await upload(generateUniqueId(), appState!.file!);
-                      }
-
-                      if (appState?.fileBytes != null) {
-                        url = await upload(
-                            generateUniqueId(), appState!.fileBytes!);
-                      }
-
-                      item.image = url;
-
-                      // writes item to Firebase
-                      await write(item);
-                    } else {
-                      setState(() {
-                        isSubmitted = true;
-                      });
-                    }
-                  },
-                ),
-              ],
             ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Add'),
+                onPressed: () async {
+                  // validates form
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Item added')),
+                    );
+
+                    Navigator.of(context).pop();
+
+                    String url = '';
+
+                    // generates new item
+                    Item item = Item(
+                      id: generateUniqueId(),
+                      name: itemName!,
+                      image: url,
+                      date: DateTime.now(),
+                      isIssued: false,
+                      borrowerName: '',
+                      borrowerEmail: '',
+                      dueDate: DateTime.now(),
+                    );
+
+                    // uploads image
+                    if (appState?.file != null) {
+                      url = await upload(generateUniqueId(), appState!.file!);
+                    }
+
+                    if (appState?.fileBytes != null) {
+                      url = await upload(
+                          generateUniqueId(), appState!.fileBytes!);
+                    }
+
+                    item.image = url;
+
+                    // writes item to Firebase
+                    await write(item);
+                  } else {
+                    setState(() {
+                      isSubmitted = true;
+                    });
+                  }
+                },
+              ),
+            ],
           );
         });
       },
