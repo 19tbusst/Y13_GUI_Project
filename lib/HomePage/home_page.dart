@@ -139,6 +139,32 @@ class _HomePageState extends State<HomePage> {
       offsetHeight = Platform.isIOS || Platform.isAndroid ? 188 : offsetHeight;
     }
 
+    List<Widget?> usedCards = [];
+    bool isEmpty = true;
+    usedCards.addAll(_items.map((item) {
+      // Only show items that match the search query
+      String search = appState.searchQuery.toLowerCase();
+      bool isSearched = item.name.toLowerCase().startsWith(search);
+
+      if (!isSearched && appState.searchQuery.isNotEmpty) {
+        return Container();
+      }
+
+      // hides items that are toggled off
+      bool isStockToggle = !item.isIssued && appState.isShowingReturned;
+      bool isIssueToggle = item.isIssued && appState.isShowingIssued;
+
+      if (!isIssueToggle && !isStockToggle) {
+        // pass the item to the ItemCard
+        return null;
+      }
+
+      isEmpty = false;
+      return ItemCard(item: item);
+    }).toList());
+
+    print(isEmpty);
+
     // return the home page
     return Column(
       children: [
@@ -161,26 +187,13 @@ class _HomePageState extends State<HomePage> {
           child: ListView(
             shrinkWrap: false,
             // maps items to ItemCards
-            children: _items.map((item) {
-              // Only show items that match the search query
-              String search = appState.searchQuery.toLowerCase();
-              bool isSearched = item.name.toLowerCase().startsWith(search);
-
-              if (!isSearched && appState.searchQuery.isNotEmpty) {
-                return Container();
-              }
-
-              // hides items that are toggled off
-              bool isStockToggle = !item.isIssued && appState.isShowingReturned;
-              bool isIssueToggle = item.isIssued && appState.isShowingIssued;
-
-              if (!isIssueToggle && !isStockToggle) {
-                // pass the item to the ItemCard
-                return Container();
-              }
-
-              return ItemCard(item: item);
-            }).toList(),
+            children: !isEmpty
+                ? usedCards.whereType<Widget>().toList()
+                : [
+                    const Center(
+                      child: Text("No items fit your search criteria"),
+                    ),
+                  ],
           ),
         )
       ],
