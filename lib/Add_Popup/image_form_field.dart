@@ -1,5 +1,6 @@
 // Flutter packages
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:io';
 
 // Pub packages
@@ -13,22 +14,41 @@ import 'package:y13_gui_project/main.dart';
 Future<String?> pickFile(context) async {
   AppState appState = Provider.of<AppState>(context, listen: false);
 
-  // Pick file
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.image,
-  );
-
-  // If file isn't null, set it to appState.file
-  if (result != null) {
-    File file = File(result.files.single.path!);
-
-    appState.setFile(file);
+  // Pick file differently depending on the platform
+  if (kIsWeb) {
+    // Handle file picking on web
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+    );
+    if (result != null) {
+      Uint8List fileBytes = result.files.single.bytes!;
+      appState.setFileBytes(fileBytes);
+    }
+  } else {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      appState.setFile(file);
+    }
   }
 
   return null;
 }
 
-imageFormField(imageValidator, pickFile, isSubmitted, setState, context) {
+imageFormField(pickFile, isSubmitted, setState, context) {
+  AppState appState = Provider.of<AppState>(context, listen: false);
+
+  // Validates image
+  String? imageValidator(String? value) {
+    if (appState.file == null && appState.fileBytes == null) {
+      return 'Please choose an image';
+    }
+    return null;
+  }
+
   return FormField<String>(
     validator: imageValidator,
     autovalidateMode: AutovalidateMode.always,

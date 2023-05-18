@@ -375,6 +375,7 @@ class _ItemCardState extends State<ItemCard> {
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 width: 200,
+                height: 200,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image(

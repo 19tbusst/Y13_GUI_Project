@@ -1,4 +1,5 @@
 // Flutter packages
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Dart packages
@@ -133,7 +134,10 @@ class _HomePageState extends State<HomePage> {
         break;
     }
 
-    int offsetHeight = Platform.isIOS || Platform.isAndroid ? 188 : 120;
+    int offsetHeight = 120;
+    if (!kIsWeb) {
+      offsetHeight = Platform.isIOS || Platform.isAndroid ? 188 : offsetHeight;
+    }
 
     // return the home page
     return Column(

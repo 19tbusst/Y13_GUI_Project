@@ -30,6 +30,12 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  Uint8List? fileBytes;
+  void setFileBytes(Uint8List value) {
+    fileBytes = value;
+    notifyListeners();
+  }
+
   // Search query
   String searchQuery = '';
   void setSearchQuery(String value) {

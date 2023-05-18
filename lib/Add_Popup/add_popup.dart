@@ -1,4 +1,5 @@
 // Flutter packages
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -44,26 +45,19 @@ class _AddPopupState extends State<AddPopup> {
   }
 
   // Uploads image to Firebase Storage
-  Future<String> upload(String uuid, File file) async {
+  Future<String> upload(String uuid, dynamic file) async {
     final storageRef = FirebaseStorage.instance.ref();
     final imagesRef = storageRef.child("images");
     final imageRef = imagesRef.child(uuid);
 
     // Upload image
-    await imageRef.putFile(file);
-    
+    if (file is File) await imageRef.putFile(file);
+    if (file is Uint8List) await imageRef.putData(file);
+
     // Get image URL
     String url = '';
     await imageRef.getDownloadURL().then((value) => url = value);
     return url;
-  }
-
-  // Validates image
-  String? imageValidator(String? value) {
-    if (appState?.file == null) {
-      return 'Please choose an image';
-    }
-    return null;
   }
 
   // Generates unique ID for item
@@ -109,15 +103,15 @@ class _AddPopupState extends State<AddPopup> {
                     ),
                     const SizedBox(height: 30),
                     // image form field
-                    imageFormField(imageValidator, pickFile, isSubmitted,
-                        setState, context),
+                    imageFormField(pickFile, isSubmitted, setState, context),
                     const Spacer(),
                     Consumer<AppState>(
                       builder: (BuildContext context, AppState appState,
                           Widget? child) {
                         // displays image
-                        if (appState.file != null) {
-                          return ImageDisplay(file: appState.file!);
+                        if (appState.file != null ||
+                            appState.fileBytes != null) {
+                          return ImageDisplay();
                         } else {
                           return const SizedBox();
                         }
@@ -157,6 +151,11 @@ class _AddPopupState extends State<AddPopup> {
                     // uploads image
                     if (appState?.file != null) {
                       url = await upload(generateUniqueId(), appState!.file!);
+                    }
+
+                    if (appState?.fileBytes != null) {
+                      url = await upload(
+                          generateUniqueId(), appState!.fileBytes!);
                     }
 
                     item.image = url;
