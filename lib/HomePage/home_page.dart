@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> {
       bool isStockToggle = !item.isIssued && appState.isShowingReturned;
       bool isIssueToggle = item.isIssued && appState.isShowingIssued;
 
-      if (!isIssueToggle && !isStockToggle) {
+      if (!isIssueToggle && !isStockToggle && search.isEmpty) {
         // pass the item to the ItemCard
         return null;
       }
