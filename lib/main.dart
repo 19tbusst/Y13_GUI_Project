@@ -2,6 +2,7 @@
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:io';
 
 // Pub packages
@@ -82,7 +83,18 @@ void main() {
       DesktopWindow.setMinWindowSize(
         const Size(410, 350),
       );
+
+      SystemChannels.platform.invokeMethod<void>(
+        'SystemChrome.setWindowTitle',
+        'Stor.io',
+      );
     }
+  } else {
+    SystemChrome.setApplicationSwitcherDescription(
+      const ApplicationSwitcherDescription(
+        label: 'Stor.io',
+      ),
+    );
   }
 
   // Run the asynchronous initialization function

@@ -263,13 +263,14 @@ class _ItemCardState extends State<ItemCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          _name,
-                          style: Theme.of(context).textTheme.titleLarge,
+                        Flexible(
+                          child: Text(
+                            _name,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
                         ),
-                        const Spacer(),
                         Column(
                           children: [
                             // swaps the icon depending on the screen size
@@ -366,7 +367,9 @@ class _ItemCardState extends State<ItemCard> {
                           width: 8,
                         ),
                         // converts the date to a string
-                        Text('${_date.day}/${_date.month}/${_date.year}'),
+                        MediaQuery.of(context).size.width > 400
+                            ? Text('${_date.day}/${_date.month}/${_date.year}')
+                            : Container(),
                         const Spacer(),
                       ],
                     ),
