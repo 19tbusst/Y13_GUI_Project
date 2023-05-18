@@ -67,18 +67,6 @@ imageFormField(pickFile, isSubmitted, setState, context) {
       return 'Please choose an image';
     }
 
-    if (appState.file != null) {
-      if (appState.file!.lengthSync() > 1000000) {
-        return 'Image must be less than 1 MB';
-      }
-    }
-
-    if (appState.fileBytes != null) {
-      if (appState.fileBytes!.length > 1000000) {
-        return 'Image must be less than 1 MB';
-      }
-    }
-
     return null;
   }
 
