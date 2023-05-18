@@ -69,6 +69,7 @@ class _AddPopupState extends State<AddPopup> {
   // Add item popup
   Future<void> showAddPopup(BuildContext context) async {
     appState?.setFile(null);
+    appState?.setFileBytes(null);
     itemName = null;
 
     isSubmitted = false;
@@ -77,99 +78,101 @@ class _AddPopupState extends State<AddPopup> {
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (context, setState) {
-          return AlertDialog(
-            title: const Text('Add Item'),
-            content: Form(
-              key: formKey,
-              child: SizedBox(
-                height: 298,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    TextFormField(
-                      // validates item name
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a valid name';
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        itemName = value;
-                      },
-                      decoration: const InputDecoration(
-                        hintText: 'Item name',
+          return SingleChildScrollView(
+            child: AlertDialog(
+              title: const Text('Add Item'),
+              content: Form(
+                key: formKey,
+                child: SizedBox(
+                  height: 298,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      TextFormField(
+                        // validates item name
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a valid name';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          itemName = value;
+                        },
+                        decoration: const InputDecoration(
+                          hintText: 'Item name',
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    // image form field
-                    imageFormField(pickFile, isSubmitted, setState, context),
-                    const Spacer(),
-                    Consumer<AppState>(
-                      builder: (BuildContext context, AppState appState,
-                          Widget? child) {
-                        // displays image
-                        if (appState.file != null ||
-                            appState.fileBytes != null) {
-                          return ImageDisplay();
-                        } else {
-                          return const SizedBox();
-                        }
-                      },
-                    ),
-                  ],
+                      const SizedBox(height: 30),
+                      // image form field
+                      imageFormField(pickFile, isSubmitted, setState, context),
+                      const Spacer(),
+                      Consumer<AppState>(
+                        builder: (BuildContext context, AppState appState,
+                            Widget? child) {
+                          // displays image
+                          if (appState.file != null ||
+                              appState.fileBytes != null) {
+                            return ImageDisplay();
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Add'),
+                  onPressed: () async {
+                    // validates form
+                    if (formKey.currentState!.validate()) {
+                      formKey.currentState!.save();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Item added')),
+                      );
+
+                      Navigator.of(context).pop();
+
+                      String url = '';
+
+                      // generates new item
+                      Item item = Item(
+                        id: generateUniqueId(),
+                        name: itemName!,
+                        image: url,
+                        date: DateTime.now(),
+                        isIssued: false,
+                        borrowerName: '',
+                        borrowerEmail: '',
+                        dueDate: DateTime.now(),
+                      );
+
+                      // uploads image
+                      if (appState?.file != null) {
+                        url = await upload(generateUniqueId(), appState!.file!);
+                      }
+
+                      if (appState?.fileBytes != null) {
+                        url = await upload(
+                            generateUniqueId(), appState!.fileBytes!);
+                      }
+
+                      item.image = url;
+
+                      // writes item to Firebase
+                      await write(item);
+                    } else {
+                      setState(() {
+                        isSubmitted = true;
+                      });
+                    }
+                  },
+                ),
+              ],
             ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('Add'),
-                onPressed: () async {
-                  // validates form
-                  if (formKey.currentState!.validate()) {
-                    formKey.currentState!.save();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Item added')),
-                    );
-
-                    Navigator.of(context).pop();
-
-                    String url = '';
-
-                    // generates new item
-                    Item item = Item(
-                      id: generateUniqueId(),
-                      name: itemName!,
-                      image: url,
-                      date: DateTime.now(),
-                      isIssued: false,
-                      borrowerName: '',
-                      borrowerEmail: '',
-                      dueDate: DateTime.now(),
-                    );
-
-                    // uploads image
-                    if (appState?.file != null) {
-                      url = await upload(generateUniqueId(), appState!.file!);
-                    }
-
-                    if (appState?.fileBytes != null) {
-                      url = await upload(
-                          generateUniqueId(), appState!.fileBytes!);
-                    }
-
-                    item.image = url;
-
-                    // writes item to Firebase
-                    await write(item);
-                  } else {
-                    setState(() {
-                      isSubmitted = true;
-                    });
-                  }
-                },
-              ),
-            ],
           );
         });
       },

@@ -31,7 +31,7 @@ class AppState extends ChangeNotifier {
   }
 
   Uint8List? fileBytes;
-  void setFileBytes(Uint8List value) {
+  void setFileBytes(Uint8List? value) {
     fileBytes = value;
     notifyListeners();
   }

@@ -57,85 +57,87 @@ class _ItemCardState extends State<ItemCard> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
-              title: const Text('Issue Item'),
-              content: Form(
-                key: issueKey,
-                child: SizedBox(
-                  height: 298,
-                  child: Column(
-                    children: <Widget>[
-                      // Borrower name
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Borrower name',
+            return SingleChildScrollView(
+              child: AlertDialog(
+                title: const Text('Issue Item'),
+                content: Form(
+                  key: issueKey,
+                  child: SizedBox(
+                    height: 298,
+                    child: Column(
+                      children: <Widget>[
+                        // Borrower name
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Borrower name',
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a name';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            setState(() {
+                              _borrowerName = value!;
+                            });
+                          },
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a name';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            _borrowerName = value!;
-                          });
-                        },
-                      ),
-                      // Borrower email
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
+                        // Borrower email
+                        TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                          ),
+                          // checks if the email is valid
+                          validator: (value) {
+                            // regex from https://regexr.com/3e48o
+                            RegExp regex =
+                                RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                            bool isPass = regex.hasMatch(value!);
+
+                            if (!isPass) {
+                              return 'Please enter an email';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            setState(() {
+                              _borrowerEmail = value!;
+                            });
+                          },
                         ),
-                        // checks if the email is valid
-                        validator: (value) {
-                          // regex from https://regexr.com/3e48o
-                          RegExp regex =
-                              RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                          bool isPass = regex.hasMatch(value!);
-
-                          if (!isPass) {
-                            return 'Please enter an email';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            _borrowerEmail = value!;
-                          });
-                        },
-                      ),
-                      const Spacer(),
-                      // submit button
-                      TextButton(
-                          onPressed: () async {
-                            // checks if the form is valid
-                            if ((issueKey.currentState! as FormState)
-                                .validate()) {
-                              (issueKey.currentState! as FormState).save();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Item Issued')),
-                              );
-
-                              // sets the due date to 7 days from now
-                              setState(() {
-                                _dueDate = DateTime.now().add(
-                                  const Duration(days: 7),
+                        const Spacer(),
+                        // submit button
+                        TextButton(
+                            onPressed: () async {
+                              // checks if the form is valid
+                              if ((issueKey.currentState! as FormState)
+                                  .validate()) {
+                                (issueKey.currentState! as FormState).save();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Item Issued')),
                                 );
 
-                                _isIssued = true;
-                              });
+                                // sets the due date to 7 days from now
+                                setState(() {
+                                  _dueDate = DateTime.now().add(
+                                    const Duration(days: 7),
+                                  );
 
-                              Navigator.of(context).pop();
+                                  _isIssued = true;
+                                });
 
-                              await write();
-                            } else {}
-                          },
-                          child: const Text(
-                            'Issue',
-                            style: TextStyle(fontSize: 17),
-                          )),
-                    ],
+                                Navigator.of(context).pop();
+
+                                await write();
+                              } else {}
+                            },
+                            child: const Text(
+                              'Issue',
+                              style: TextStyle(fontSize: 17),
+                            )),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -155,70 +157,72 @@ class _ItemCardState extends State<ItemCard> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return AlertDialog(
-              title: const Text('Return Item'),
-              content: Form(
-                child: SizedBox(
-                  height: 298,
-                  child: Column(
-                    children: <Widget>[
-                      // confirm return checkbox
-                      CheckboxListTile(
-                        title: const Text('Confirm Return'),
-                        value: _isConfirmed,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+            return SingleChildScrollView(
+              child: AlertDialog(
+                title: const Text('Return Item'),
+                content: Form(
+                  child: SizedBox(
+                    height: 298,
+                    child: Column(
+                      children: <Widget>[
+                        // confirm return checkbox
+                        CheckboxListTile(
+                          title: const Text('Confirm Return'),
+                          value: _isConfirmed,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          // update checkbox value
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isConfirmed = value!;
+                            });
+                          },
+                          controlAffinity: ListTileControlAffinity.trailing,
                         ),
-                        // update checkbox value
-                        onChanged: (bool? value) {
-                          setState(() {
-                            _isConfirmed = value!;
-                          });
-                        },
-                        controlAffinity: ListTileControlAffinity.trailing,
-                      ),
-                      const Spacer(),
-                      // submit form
-                      TextButton(
-                        style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.all<Color>(
-                            _isConfirmed
-                                ? Theme.of(context)
-                                    .colorScheme
-                                    .primary
-                                    .withAlpha(20)
-                                : Colors.transparent,
+                        const Spacer(),
+                        // submit form
+                        TextButton(
+                          style: ButtonStyle(
+                            overlayColor: MaterialStateProperty.all<Color>(
+                              _isConfirmed
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withAlpha(20)
+                                  : Colors.transparent,
+                            ),
+                          ),
+                          // submit form if checkbox is checked
+                          onPressed: () async {
+                            if (_isConfirmed) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Item Returned')),
+                              );
+
+                              // reset item properties
+                              setState(() {
+                                _isIssued = false;
+                                _borrowerName = '';
+                                _borrowerEmail = '';
+                              });
+
+                              Navigator.of(context).pop();
+
+                              await write();
+                            } else {}
+                          },
+                          child: Text(
+                            'Return',
+                            style: TextStyle(
+                                color: _isConfirmed
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Colors.grey,
+                                fontSize: 17),
                           ),
                         ),
-                        // submit form if checkbox is checked
-                        onPressed: () async {
-                          if (_isConfirmed) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Item Returned')),
-                            );
-
-                            // reset item properties
-                            setState(() {
-                              _isIssued = false;
-                              _borrowerName = '';
-                              _borrowerEmail = '';
-                            });
-
-                            Navigator.of(context).pop();
-
-                            await write();
-                          } else {}
-                        },
-                        child: Text(
-                          'Return',
-                          style: TextStyle(
-                              color: _isConfirmed
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Colors.grey,
-                              fontSize: 17),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
