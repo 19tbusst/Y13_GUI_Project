@@ -30,7 +30,8 @@ Future<String?> pickFile(context) async {
       Uint8List fileBytes = result.files.single.bytes!;
       if (result.files.single.extension == 'jpg' ||
           result.files.single.extension == 'jpeg' ||
-          result.files.single.extension == 'png') {
+          result.files.single.extension == 'png' ||
+          result.files.single.extension == 'webp') {
         appState.setFileBytes(fileBytes);
       } else {
         appState.setFileBytes(null);
@@ -44,7 +45,8 @@ Future<String?> pickFile(context) async {
     if (result != null) {
       if (result.files.single.extension == 'jpg' ||
           result.files.single.extension == 'jpeg' ||
-          result.files.single.extension == 'png') {
+          result.files.single.extension == 'png' ||
+          result.files.single.extension == 'webp') {
         File file = File(result.files.single.path!);
         appState.setFile(file);
       } else {
