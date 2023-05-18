@@ -163,8 +163,6 @@ class _HomePageState extends State<HomePage> {
       return ItemCard(item: item);
     }).toList());
 
-    print(isEmpty);
-
     // return the home page
     return Column(
       children: [

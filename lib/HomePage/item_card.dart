@@ -63,7 +63,7 @@ class _ItemCardState extends State<ItemCard> {
                 child: Form(
                   key: issueKey,
                   child: SizedBox(
-                    height: 298,
+                    height: 312,
                     child: Column(
                       children: <Widget>[
                         // Borrower name
@@ -162,7 +162,7 @@ class _ItemCardState extends State<ItemCard> {
               content: SingleChildScrollView(
                 child: Form(
                   child: SizedBox(
-                    height: 298,
+                    height: 312,
                     child: Column(
                       children: <Widget>[
                         // confirm return checkbox

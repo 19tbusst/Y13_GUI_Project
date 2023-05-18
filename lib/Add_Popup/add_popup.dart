@@ -84,7 +84,7 @@ class _AddPopupState extends State<AddPopup> {
               child: Form(
                 key: formKey,
                 child: SizedBox(
-                  height: 298,
+                  height: 312,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
