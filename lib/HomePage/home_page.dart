@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
         ConstrainedBox(
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height - offsetHeight,
-            maxWidth: MediaQuery.of(context).size.width,
+            maxWidth: 800,
           ),
           child: ListView(
             shrinkWrap: false,

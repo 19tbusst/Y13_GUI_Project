@@ -239,6 +239,7 @@ class _ItemCardState extends State<ItemCard> {
     _name = widget.item.name;
     _isIssued = widget.item.isIssued;
     _date = widget.item.date;
+    _dueDate = widget.item.dueDate;
     _image = widget.item.image;
     _borrowerName = widget.item.borrowerName;
     _borrowerEmail = widget.item.borrowerEmail;
@@ -248,57 +249,43 @@ class _ItemCardState extends State<ItemCard> {
     return Card(
       elevation: 2.5,
       child: ConstrainedBox(
-        constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width - 200, maxHeight: 200),
+        constraints: const BoxConstraints(maxHeight: 200),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width - 224,
-                  maxHeight: 200),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            _name,
-                            style: Theme.of(context).textTheme.titleLarge,
+            Expanded(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width - 224,
+                    maxHeight: 200),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              _name,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                           ),
-                        ),
-                        Column(
-                          children: [
-                            // swaps the icon depending on the screen size
-                            (MediaQuery.of(context).size.width <= 500)
-                                ? IconButton(
-                                    // swaps the icon depending on the item status
-                                    icon: _isIssued
-                                        ? const FaIcon(
-                                            FontAwesomeIcons.solidSquarePlus)
-                                        : const FaIcon(
-                                            FontAwesomeIcons.solidSquareMinus),
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    iconSize: 28,
-                                    onPressed: () {
-                                      if (_isIssued) {
-                                        showReturnPopup(context);
-                                      } else {
-                                        showIssuePopup(context);
-                                      }
-                                    },
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ElevatedButton(
-                                      child:
-                                          // swaps the text depending on the item status
-                                          Text(_isIssued ? 'Return' : 'Issue'),
+                          Column(
+                            children: [
+                              // swaps the icon depending on the screen size
+                              (MediaQuery.of(context).size.width <= 500)
+                                  ? IconButton(
+                                      // swaps the icon depending on the item status
+                                      icon: _isIssued
+                                          ? const FaIcon(
+                                              FontAwesomeIcons.solidSquarePlus)
+                                          : const FaIcon(FontAwesomeIcons
+                                              .solidSquareMinus),
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      iconSize: 28,
                                       onPressed: () {
                                         if (_isIssued) {
                                           showReturnPopup(context);
@@ -306,74 +293,93 @@ class _ItemCardState extends State<ItemCard> {
                                           showIssuePopup(context);
                                         }
                                       },
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ElevatedButton(
+                                        child:
+                                            // swaps the text depending on the item status
+                                            Text(
+                                                _isIssued ? 'Return' : 'Issue'),
+                                        onPressed: () {
+                                          if (_isIssued) {
+                                            showReturnPopup(context);
+                                          } else {
+                                            showIssuePopup(context);
+                                          }
+                                        },
+                                      ),
                                     ),
-                                  ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    _isIssued
-                        ? Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Column(
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text('Borrower: $_borrowerName')
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Flexible(
-                                      child: Text('Email: $_borrowerEmail'),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Flexible(
-                                      // converts the due date to a string
-                                      child: Text('Due: ${_dueDate.day}/'
-                                          '${_dueDate.month}/${_dueDate.year}'),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        : const SizedBox(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Card(
-                          color: Theme.of(context).colorScheme.background,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(_isIssued ? 'Issued' : 'Not Issued'),
+                            ],
                           ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        // converts the date to a string
-                        MediaQuery.of(context).size.width > 400
-                            ? Text('${_date.day}/${_date.month}/${_date.year}')
-                            : Container(),
-                        const Spacer(),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                      const Spacer(),
+                      _isIssued
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Flexible(
+                                          child:
+                                              Text('Borrower: $_borrowerName'))
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Flexible(
+                                        child: Text('Email: $_borrowerEmail'),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Flexible(
+                                        // converts the due date to a string
+                                        child: Text('Due: ${_dueDate.day}/'
+                                            '${_dueDate.month}/${_dueDate.year}'),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Card(
+                            color: Theme.of(context).colorScheme.background,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(_isIssued ? 'Issued' : 'Not Issued'),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          // converts the date to a string
+                          MediaQuery.of(context).size.width > 400
+                              ? Text(
+                                  '${_date.day}/${_date.month}/${_date.year}')
+                              : Container(),
+                          const Spacer(),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
