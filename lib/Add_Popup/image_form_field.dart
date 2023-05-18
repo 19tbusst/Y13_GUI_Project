@@ -8,7 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 
 // Local files
-import 'package:y13_gui_project/main.dart';
+import 'package:storio/main.dart';
 
 // picks file from device
 Future<String?> pickFile(context) async {

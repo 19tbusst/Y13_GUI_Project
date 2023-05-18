@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 // local files
-import 'package:y13_gui_project/main.dart';
+import 'package:storio/main.dart';
 
 // toggle button options
 const List<Widget> options = <Widget>[

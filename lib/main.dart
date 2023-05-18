@@ -12,9 +12,9 @@ import 'package:desktop_window/desktop_window.dart';
 
 // Local files
 import 'firebase_options.dart';
-import 'package:y13_gui_project/HomePage/home_page.dart';
-import 'package:y13_gui_project/Add_Popup/add_popup.dart';
-import 'package:y13_gui_project/search_bar.dart';
+import 'package:storio/HomePage/home_page.dart';
+import 'package:storio/Add_Popup/add_popup.dart';
+import 'package:storio/search_bar.dart';
 
 class AppState extends ChangeNotifier {
   // Allows filtering of items across files

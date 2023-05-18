@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 // Local files
-import 'package:y13_gui_project/main.dart';
+import 'package:storio/main.dart';
 import 'stock_status_toggle.dart';
 import 'sorting_dropdown.dart';
 import 'item_card.dart';

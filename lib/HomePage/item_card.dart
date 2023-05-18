@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 // Local files
-import 'package:y13_gui_project/main.dart';
+import 'package:storio/main.dart';
 
 class ItemCard extends StatefulWidget {
   ItemCard({super.key, required this.item});

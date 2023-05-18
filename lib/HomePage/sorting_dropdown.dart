@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:y13_gui_project/main.dart';
+import 'package:storio/main.dart';
 
 class SortingDropdown extends StatefulWidget {
   const SortingDropdown({super.key});

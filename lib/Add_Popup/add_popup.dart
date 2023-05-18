@@ -8,11 +8,11 @@ import 'package:uuid/uuid.dart';
 import 'package:provider/provider.dart';
 
 // local files
-import 'package:y13_gui_project/Add_Popup/image_display.dart';
+import 'package:storio/Add_Popup/image_display.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:y13_gui_project/Add_Popup/image_form_field.dart';
-import 'package:y13_gui_project/main.dart';
+import 'package:storio/Add_Popup/image_form_field.dart';
+import 'package:storio/main.dart';
 
 class AddPopup extends StatefulWidget {
   const AddPopup({super.key});

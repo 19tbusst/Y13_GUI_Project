@@ -1,6 +1,6 @@
 {
-    "name": "y13_gui_project",
-    "short_name": "y13_gui_project",
+    "name": "storio",
+    "short_name": "storio",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

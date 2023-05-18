@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 
-import 'package:y13_gui_project/main.dart';
+import 'package:storio/main.dart';
 
 class ImageDisplay extends StatelessWidget {
   ImageDisplay({super.key});

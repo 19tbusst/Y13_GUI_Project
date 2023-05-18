@@ -6,7 +6,7 @@ import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:provider/provider.dart';
 
 // Local fields
-import 'package:y13_gui_project/main.dart';
+import 'package:storio/main.dart';
 
 class SearchBar extends StatelessWidget implements PreferredSizeWidget {
   const SearchBar({Key? key}) : super(key: key);

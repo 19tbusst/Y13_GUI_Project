@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "y13_gui_project" "\0"
+            VALUE "FileDescription", "Stor.io" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "y13_gui_project" "\0"
+            VALUE "InternalName", "Stor.io" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "y13_gui_project.exe" "\0"
-            VALUE "ProductName", "y13_gui_project" "\0"
+            VALUE "OriginalFilename", "storio.exe" "\0"
+            VALUE "ProductName", "Stor.io" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

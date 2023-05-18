@@ -1,4 +1,4 @@
-package com.example.y13_gui_project
+package com.example.storio
 
 import io.flutter.embedding.android.FlutterActivity
 
