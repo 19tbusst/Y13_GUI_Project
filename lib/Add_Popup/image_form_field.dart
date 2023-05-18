@@ -28,10 +28,10 @@ Future<String?> pickFile(context) async {
 
     if (result != null) {
       Uint8List fileBytes = result.files.single.bytes!;
-      if (result.files.single.extension == 'jpg' ||
-          result.files.single.extension == 'jpeg' ||
-          result.files.single.extension == 'png' ||
-          result.files.single.extension == 'webp') {
+      if (result.files.single.extension?.toLowerCase() == 'jpg' ||
+          result.files.single.extension?.toLowerCase() == 'jpeg' ||
+          result.files.single.extension?.toLowerCase() == 'png' ||
+          result.files.single.extension?.toLowerCase() == 'webp') {
         appState.setFileBytes(fileBytes);
       } else {
         appState.setFileBytes(null);
@@ -43,10 +43,10 @@ Future<String?> pickFile(context) async {
     );
 
     if (result != null) {
-      if (result.files.single.extension == 'jpg' ||
-          result.files.single.extension == 'jpeg' ||
-          result.files.single.extension == 'png' ||
-          result.files.single.extension == 'webp') {
+      if (result.files.single.extension?.toLowerCase() == 'jpg' ||
+          result.files.single.extension?.toLowerCase() == 'jpeg' ||
+          result.files.single.extension?.toLowerCase() == 'png' ||
+          result.files.single.extension?.toLowerCase() == 'webp') {
         File file = File(result.files.single.path!);
         appState.setFile(file);
       } else {
@@ -65,6 +65,18 @@ imageFormField(pickFile, isSubmitted, setState, context) {
   String? imageValidator(String? value) {
     if (appState.file == null && appState.fileBytes == null) {
       return 'Please choose an image';
+    }
+
+    if (appState.file != null) {
+      if (appState.file!.lengthSync() > 1000000) {
+        return 'Image must be less than 1 MB';
+      }
+    }
+
+    if (appState.fileBytes != null) {
+      if (appState.fileBytes!.length > 1000000) {
+        return 'Image must be less than 1 MB';
+      }
     }
 
     return null;
