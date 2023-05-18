@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> {
 
   // maps items from the database
   Future<List<Item>> mapItems() async {
+    AppState appState = Provider.of<AppState>(context, listen: false);
     final data = await read();
 
     // if data is null, return an empty list
@@ -97,8 +98,7 @@ class _HomePageState extends State<HomePage> {
         .toList();
 
     List<String> suggestions = items.map((e) => e.name).toList();
-    Provider.of<AppState>(context, listen: false)
-        .setSearchSuggestions(suggestions);
+    appState.setSearchSuggestions(suggestions);
 
     return items;
   }

@@ -40,6 +40,20 @@ class _StockStatusToggleState extends State<StockStatusToggle> {
               appState.isShowingReturned = !appState.isShowingReturned;
             });
           }
+
+          if (!appState.isShowingIssued && !appState.isShowingIssued) {
+            if (index == 1) {
+              _selectedOptions[0] = true;
+              setState(() {
+                appState.isShowingReturned = true;
+              });
+            } else {
+              _selectedOptions[1] = true;
+              setState(() {
+                appState.isShowingIssued = true;
+              });
+            }
+          }
           _selectedOptions[index] = !_selectedOptions[index];
         });
       },

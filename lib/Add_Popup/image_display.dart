@@ -19,11 +19,12 @@ class ImageDisplay extends StatelessWidget {
         width: 140,
         height: 140,
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
           image: DecorationImage(
             image: kIsWeb
                 ? MemoryImage(appState.fileBytes!)
                 : FileImage(appState.file!) as ImageProvider<Object>,
-            fit: BoxFit.fill,
+            fit: BoxFit.cover,
           ),
         ),
       ),
